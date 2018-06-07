@@ -15,6 +15,13 @@ app.get("/select", (req, res) => {
   })();
 });
 
+app.get("/fake_posts", (req, res) => {
+  (async () => {
+    let results = await db.queryAsync("SELECT * FROM fake_posts");
+    res.send(results);
+  })();
+});
+
 let port = process.env.PORT || 3200;
 
 app.listen(port, () => {
