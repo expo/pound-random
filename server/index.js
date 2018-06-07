@@ -17,5 +17,5 @@ app.get("/select", (req, res) => {
 let port = process.env.PORT || 3200;
 
 app.listen(port, () => {
-  console.log('Example app listening on port ' + port);
+  console.log('Listening on port ' + port);
 });

@@ -2,7 +2,10 @@ let secret = require('../../pound-random-secret');
 let mysql = require('mysql');
 
 let conn = mysql.createConnection(secret.database);
-conn.connect();
+
+// TODO: Maybe don't connect here?
+// Should probably lazily do this
+connect();
 
 function connect() {
   conn.connect();
@@ -19,21 +22,15 @@ async function queryAsync(q) {
       if (err) {
         reject(err);
       } else {
-        results.fields = fields;
+        //results.fields = fields;
         resolve(results);
       }
     });
   });
 }
 
-function mysqlCommand() {
-  let conf = secret.database;
-  return "mysql -h" + conf.host + " -u" + conf.user + " -p" + conf.password + " " + conf.database;
-}
-
 module.exports = {
   queryAsync,
-  mysqlCommand,
   _conn: conn,
   connect,
   disconnect,
