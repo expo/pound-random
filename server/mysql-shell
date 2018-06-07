@@ -1,0 +1,2 @@
+#!/usr/bin/env sh
+`node -e 'conf=require("../../pound-random-secret").database;console.log("mysql -h" + conf.host + " -u" + conf.user + " -p" + conf.password + " " + conf.database);'`

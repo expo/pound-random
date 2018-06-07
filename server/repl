@@ -1,0 +1,3 @@
+#!/usr/bin/env sh
+node --experimental-repl-await -e 'db = require("./db");' -i
+
