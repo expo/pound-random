@@ -24,6 +24,8 @@ app.get("/fake_posts", (req, res) => {
 
 let port = process.env.PORT || 3200;
 
-app.listen(port, () => {
-  console.log('Listening on port ' + port);
-});
+if (require.main === module) {
+  app.listen(port, () => {
+    console.log('Listening on port ' + port);
+  });
+}

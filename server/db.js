@@ -26,10 +26,10 @@ function _disconnect() {
   }
 }
 
-async function queryAsync(q) {
+async function queryAsync(q, ...rest) {
   return new Promise((resolve, reject) => {
     _connect();
-    conn.query(q, (err, results, fields) => {
+    conn.query(q, ...rest, (err, results, fields) => {
       // TODO: Do we want to do anything with fields?
       if (err) {
         reject(err);
