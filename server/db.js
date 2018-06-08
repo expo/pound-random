@@ -1,22 +1,34 @@
 let secret = require('../../pound-random-secret');
 let mysql = require('mysql');
 
-let conn = mysql.createConnection(secret.database);
 
-// TODO: Maybe don't connect here?
-// Should probably lazily do this
-connect();
+let _connected = false;
+let conn = null;
 
-function connect() {
-  conn.connect();
+function _connect() {
+  if (_connected) {
+    return false;
+  } else {
+    conn = mysql.createConnection(secret.database);
+    conn.connect();
+    _connected = true;
+    return true;
+  }
 }
 
-function disconnect() {
-  conn.end();
+function _disconnect() {
+  if (_connected) {
+    conn.end();
+    _connected = false;
+    return true;
+  } else {
+    return false;
+  }
 }
 
 async function queryAsync(q) {
   return new Promise((resolve, reject) => {
+    _connect();
     conn.query(q, (err, results, fields) => {
       // TODO: Do we want to do anything with fields?
       if (err) {
@@ -32,6 +44,7 @@ async function queryAsync(q) {
 module.exports = {
   queryAsync,
   _conn: conn,
-  connect,
-  disconnect,
+  _connect,
+  _disconnect,
+  _connected,
 };
