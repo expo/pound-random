@@ -12,6 +12,14 @@ async function getUserByIdAsync(userId) {
   return {...result[0]};
 }
 
+async function addUserAsync(user) {
+  let u = {...user};
+  u.date_created = u.date_created || Date.now();
+  let result = await db.queryAsync("INSERT INTO user (user_id, username, password, email, date_created) VALUES (?, ?, ?, ?, ?)", [u.user_id, u.username, u.password, u.email, u.date_created]);
+  return u.user_id;
+}
+
 module.exports = {
   getUserByIdAsync,
+  addUserAsync,
 };
