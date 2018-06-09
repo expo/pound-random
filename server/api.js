@@ -1,4 +1,5 @@
 let data = require("./data");
+let db = require("./db");
 let typedError = require("./typedError");
 
 class Api {
@@ -10,30 +11,25 @@ class Api {
   async addAsync(a, b) {
     return a + b;
   }
+
+  async fakePostsAsync() {
+    return await db.queryAsync("SELECT * FROM fake_posts");
+  }
+
+  async errorAsync() {
+    throw typedError("TEST_ERROR", "This is a test");
+  }
 }
 
 async function callMethodAsync(context, method, args) {
-  if (method.startsWith("_")) {
-    throw typedError("API_NOT_ALLOWED", "Can't call methods that start with _");
-  }
-
-  // TODO: Maybe move this somewhere else?
-  // Or don't do this?
-  let ctx2 = {...context};
-  if (ctx2.userId) {
-    ctx2.user = await data.getUserByIdAsync(context.userId);
-  }
-
-  let a = new Api(ctx2);
-  //console.log("method=", method, "args=", args);
+  let a = new Api(context);
   let result = await a[method + "Async"](...args);
   return result;
-
 }
 
 async function shellCallMethodAsync(method, ...args) {
   let context = {
-    userId: "user:shell",
+    userId: "user:__shell__",
   };
 
   return await callMethodAsync(context, method, args);
