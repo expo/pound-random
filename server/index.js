@@ -30,7 +30,7 @@ async function apiAsync(req, res) {
   if (req.params.a) {
     args = [req.params.a, req.params.b, req.params.c, req.params.d, req.params.e, req.params.f, req.params.g];
   }
-  let context = {userId};
+  let context = {userId, token};
   let callsig = "[" + (context.userId || "") + "]" + method + JSON.stringify(args).replace(/^./,"(").replace(/.$/,")");
   console.log("API: " + callsig);
   try {

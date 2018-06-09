@@ -35,10 +35,18 @@ async function userForTokenAsync(token) {
   }
 }
 
+async function userIdForUsernameAsync(username) {
+  let result = await db.queryAsync("SELECT user_id FROM user WHERE username = ?", [username]);
+  if (result.length > 0) {
+    return result[0].user_id;
+  }
+}
+
 module.exports = {
   getUserByIdAsync,
   addUserAsync,
   createSessionAsync,
   deleteSessionAsync,
   userForTokenAsync,
+  userIdForUsernameAsync,
 };

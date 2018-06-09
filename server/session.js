@@ -7,7 +7,6 @@ function makeUuid() {
   let UUID_LENGTH = 22;
   let UUID_ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_";
 
-
   let bytes = new Array(32);
   uuidV4(null, bytes, 0);
   uuidV4(null, bytes, 16);
