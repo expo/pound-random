@@ -12,6 +12,10 @@ class Api {
     return a + b;
   }
 
+  async subtractAsync(a, b) {
+    return a - b;
+  }
+
   async fakePostsAsync() {
     return await db.queryAsync("SELECT * FROM fake_posts");
   }

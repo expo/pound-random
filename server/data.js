@@ -19,7 +19,26 @@ async function addUserAsync(user) {
   return u.user_id;
 }
 
+async function createSessionAsync(userId, token) {
+  let result = await db.queryAsync("INSERT INTO sessions (user_id, token, created_time) VALUES (?, ?, ?)", [userId, token, Date.now()]);
+  return token;
+}
+
+async function deleteSessionAsync(token) {
+  await db.queryAsync("DELETE FROM sessions WHERE token = ?", [token]);
+}
+
+async function userForTokenAsync(token) {
+  let result = await db.queryAsync("SELECT user_id FROM sessions WHERE token = ?", [token]);
+  if (result.length > 0) {
+    return result[0].user_id;
+  }
+}
+
 module.exports = {
   getUserByIdAsync,
   addUserAsync,
+  createSessionAsync,
+  deleteSessionAsync,
+  userForTokenAsync,
 };

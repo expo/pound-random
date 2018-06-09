@@ -2,7 +2,7 @@ let express = require('express');
 
 let bodyParser = require("body-parser");
 
-
+let data = require("./data");
 let db = require("./db");
 let api = require("./api");
 
@@ -14,9 +14,19 @@ app.get("/", (req, res) => {
 });
 
 async function apiAsync(req, res) {
-  let userId = "user:__api__";
   let method = req.params.method;
   let args = req.body;
+
+  let token = req.header("X-PoundRandom-Auth-Token");
+  console.log("token=", token);
+  let userId = null;
+  if (token) {
+    userId = await data.userForTokenAsync(token);
+    console.log("userId=", userId);
+    if (!userId) {
+      console.warn("No session for auth token: " + token);
+    }
+  }
 
   // If you use request parameters, then we ignore the body
   if (req.params.a) {
