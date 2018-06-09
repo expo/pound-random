@@ -1,5 +1,13 @@
 import React from "react";
-import { FlatList, StyleSheet, Text, TextInput, View } from "react-native";
+import {
+  AsyncStorage,
+  Button,
+  FlatList,
+  StyleSheet,
+  Text,
+  TextInput,
+  View
+} from "react-native";
 
 import Api from "./Api";
 
@@ -77,7 +85,7 @@ class Adder extends React.Component {
     let b = parseInt(this.state.b);
     console.log("Remotely adding ", a, b);
     let result = await api.callMethodAsync(
-      "add",
+      "subtract",
       parseInt(this.state.a),
       parseInt(this.state.b)
     );
@@ -150,7 +158,49 @@ export default class App extends React.Component {
     return (
       <View style={styles.container}>
         <Adder />
+        <SortOfLogin />
         <FakePosts />
+      </View>
+    );
+  }
+}
+
+class SortOfLogin extends React.Component {
+  state = {
+    username: null
+  };
+
+  _submitAsync = async () => {
+    let result = await api.callMethodAsync("sortOfLogin", this.state.username);
+    await api.storeSessionAsync(result.token);
+    console.log(result);
+  };
+
+  render() {
+    return (
+      <View
+        style={{
+          marginBottom: 50
+        }}
+      >
+        <Text>Username:</Text>
+        <TextInput
+          autoCapitalize="none"
+          autoCorrect={false}
+          value={this.state.username}
+          onChangeText={text => {
+            this.setState({ username: text });
+          }}
+          onSubmitEditing={() => {
+            this._submitAsync();
+          }}
+        />
+        <Button
+          title="Login"
+          onPress={() => {
+            this._submitAsync();
+          }}
+        />
       </View>
     );
   }
