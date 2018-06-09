@@ -1,9 +1,8 @@
 import { AsyncStorage } from "react-native";
 
-let BASE_URL = "http://ec2-34-219-33-58.us-west-2.compute.amazonaws.com:3200/";
+import typedError from "./typedError";
 
-// let userId = "user:ccheever";
-// let token = "session:user:ccheever/l62BhgIJM8eC7C0mbxo7Qy";
+let BASE_URL = "http://ec2-34-219-33-58.us-west-2.compute.amazonaws.com:3200/";
 
 function clientError(code, message, props) {
   let err = new Error(message);
@@ -13,7 +12,7 @@ function clientError(code, message, props) {
   return err;
 }
 
-export default class Api {
+class Api {
   constructor(context) {
     this.context = context;
   }
@@ -28,9 +27,17 @@ export default class Api {
         "X-PoundRandom-Auth-Token": token
       }
     });
-    if (response.status == 520) {
+    if (response.status === 520) {
       let info = await response.json();
       throw clientError(info.code, info.message, info.props);
+    } else if (response.status === 400) {
+      let info = await response.json();
+      let e = typedError("BAD_API_REQUEST", info.message);
+      e.code = info.code;
+      e.props = info.props;
+      throw e;
+    } else if (response.status !== 200) {
+      throw typedError("UNEXPECTED_API_STATUS_CODE", "Unexpected API status code: " + response.status);
     }
     let result = await response.json();
     return result;
@@ -44,3 +51,6 @@ export default class Api {
     return await AsyncStorage.getItem("session");
   };
 }
+
+let api = new Api();
+export default api;

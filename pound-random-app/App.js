@@ -10,11 +10,10 @@ import {
 } from "react-native";
 
 import Api from "./Api";
+import Signup from "./Signup";
 
 let SERVER_ROOT =
   "http://ec2-34-219-33-58.us-west-2.compute.amazonaws.com:3200";
-
-let api = new Api({ userId: "ccheever" });
 
 class FakePosts extends React.Component {
   state = {
@@ -23,7 +22,7 @@ class FakePosts extends React.Component {
   };
 
   _loadDataAsync = async () => {
-    let data = await api.callMethodAsync("fakePosts");
+    let data = await Api.callMethodAsync("fakePosts");
     this.setState({ data, loaded: true });
   };
 
@@ -84,7 +83,7 @@ class Adder extends React.Component {
     let a = parseInt(this.state.a);
     let b = parseInt(this.state.b);
     console.log("Remotely adding ", a, b);
-    let result = await api.callMethodAsync(
+    let result = await Api.callMethodAsync(
       "subtract",
       parseInt(this.state.a),
       parseInt(this.state.b)
@@ -99,6 +98,7 @@ class Adder extends React.Component {
     return (
       <View>
         <TextInput
+          keyboardType="numeric"
           style={s}
           value={this.state.a}
           onChangeText={text => {
@@ -109,6 +109,7 @@ class Adder extends React.Component {
           }}
         />
         <TextInput
+          keyboardType="numeric"
           style={s}
           value={this.state.b}
           onChangeText={text => {
@@ -133,7 +134,7 @@ class SimpleAdd extends React.Component {
   };
 
   _addAsync = async () => {
-    let result = await api.callMethodAsync("add", 42, 5);
+    let result = await Api.callMethodAsync("add", 42, 5);
     this.setState({ result, loading: false });
   };
 
@@ -158,6 +159,7 @@ export default class App extends React.Component {
     return (
       <View style={styles.container}>
         <Adder />
+        <Signup />
         <SortOfLogin />
         <ErrorButton />
         <FakePosts />
@@ -172,7 +174,7 @@ class SortOfLogin extends React.Component {
   };
 
   _submitAsync = async () => {
-    let result = await api.callMethodAsync("sortOfLogin", this.state.username);
+    let result = await Api.callMethodAsync("sortOfLogin", this.state.username);
     await api.storeSessionAsync(result.token);
     console.log(result);
   };
@@ -210,11 +212,11 @@ class SortOfLogin extends React.Component {
 class ErrorButton extends React.Component {
   _callErrorApiAsync = async () => {
     try {
-      let _x = await api.callMethodAsync("error");
+      let _x = await Api.callMethodAsync("error");
       console.log("Woah, didn't get an error");
     } catch (err) {
       if (err && err.type === "CLIENT_ERROR") {
-        console.log("ClientError:", err, err.code,  err.props);
+        console.log("ClientError:", err, err.code, err.props);
       }
     }
 
