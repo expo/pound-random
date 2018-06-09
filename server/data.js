@@ -4,7 +4,7 @@ let db = require("./db")
 let typedError = require("./typedError");
 
 async function getUserByIdAsync(userId) {
-  let result = await db.queryAsync("SELECT user_id, username, password, email, date_created FROM user WHERE user_id = ?", [userId]);
+  let result = await db.queryAsync("SELECT user_id, username, password, email, date_created FROM users WHERE user_id = ?", [userId]);
   if (result.length < 1) {
     throw new typedError("NOT_FOUND", "No user found for userId " + userId);
   }
@@ -15,7 +15,7 @@ async function getUserByIdAsync(userId) {
 async function addUserAsync(user) {
   let u = {...user};
   u.date_created = u.date_created || Date.now();
-  let result = await db.queryAsync("INSERT INTO user (user_id, username, password, email, date_created) VALUES (?, ?, ?, ?, ?)", [u.user_id, u.username, u.password, u.email, u.date_created]);
+  let result = await db.queryAsync("INSERT INTO users (user_id, username, display_username, mobile_number, password, email, date_created) VALUES (?, ?, ?, ?, ?)", [u.user_id, u.username, u.display_username, u.mobile_number, u.password, u.email, u.date_created]);
   return u.user_id;
 }
 
@@ -36,7 +36,7 @@ async function userForTokenAsync(token) {
 }
 
 async function userIdForUsernameAsync(username) {
-  let result = await db.queryAsync("SELECT user_id FROM user WHERE username = ?", [username]);
+  let result = await db.queryAsync("SELECT user_id FROM users WHERE username = ?", [username]);
   if (result.length > 0) {
     return result[0].user_id;
   }

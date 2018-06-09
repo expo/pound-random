@@ -38,6 +38,13 @@ async function apiAsync(req, res) {
     let result = await api.callMethodAsync(context, method, args);
     res.json(result);
   } catch (err) {
+    if (err && err.type === "API_ERROR") {
+      res.status(400);
+      res.json({
+        BAD_REQUEST: true,
+        message: err.message,
+      });
+    }
     if (clientError.isClientError(err)) {
       res.status(520);
       res.json({

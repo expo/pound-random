@@ -2,6 +2,7 @@ let clientError = require("./clientError");
 let data = require("./data");
 let db = require("./db");
 let session = require("./session");
+let signup = require("./signup");
 let typedError = require("./typedError");
 
 class Api {
@@ -23,6 +24,17 @@ class Api {
 
   async subtractAsync(a, b) {
     return a - b;
+  }
+
+  sortOfSignupDoc() {
+    return {
+      doc: "Proto signup",
+      params: [{"username": "string", "mobileNumber": "string" }],
+    }
+  }
+
+  async sortOfSignupAsync({username, mobileNumber}) {
+    return await signup.signupUserAsync(username, mobileNumber);
   }
 
   async fakePostsAsync() {
@@ -84,7 +96,11 @@ class Api {
 
 async function callMethodAsync(context, method, args) {
   let a = new Api(context);
-  let result = await a[method + "Async"](...args);
+  let m = method + "Async";
+  if (!a[m]) {
+    throw typedError("API_ERROR", "No such method '" + m + "'");
+  }
+  let result = await a[m](...args);
   return result;
 }
 
