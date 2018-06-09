@@ -1,6 +1,7 @@
 let clientError = require("./clientError");
 let data = require("./data");
 let db = require("./db");
+let post = require("./post");
 let session = require("./session");
 let signup = require("./signup");
 let typedError = require("./typedError");
@@ -68,6 +69,16 @@ class Api {
   async logoutSessionAsync() {
     await session.expireSessionAsync(this.context.token);
   }
+
+  async createPostAsync({content, url, replyTo}) {
+    return await post.newPostAsync(this.context.userId, content, url, replyTo, new Date());
+  }
+
+  async deletePostAsync(postId) {
+    // For now, you can only delete your own posts
+    return await post.deletePostByUserAsync(postId, this.context.userId);
+  }
+
 
   __doc__Doc() {
     return {
