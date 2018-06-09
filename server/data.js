@@ -1,5 +1,3 @@
-let assert = require("assert");
-
 let db = require("./db")
 let typedError = require("./typedError");
 
