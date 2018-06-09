@@ -159,6 +159,7 @@ export default class App extends React.Component {
       <View style={styles.container}>
         <Adder />
         <SortOfLogin />
+        <ErrorButton />
         <FakePosts />
       </View>
     );
@@ -202,6 +203,29 @@ class SortOfLogin extends React.Component {
           }}
         />
       </View>
+    );
+  }
+}
+
+class ErrorButton extends React.Component {
+  _callErrorApiAsync = async () => {
+    try {
+      let _x = await api.callMethodAsync("error");
+      console.log("Woah, didn't get an error");
+    } catch (err) {
+      if (err && err.type === "CLIENT_ERROR") {
+        console.log("ClientError:", err, err.code,  err.props);
+      }
+    }
+
+  }
+
+
+  render() {
+    return (
+      <Button title="Error" onPress={() => {
+        this._callErrorApiAsync();
+      }} />
     );
   }
 }
