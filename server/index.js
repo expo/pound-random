@@ -2,6 +2,7 @@ let express = require('express');
 
 let bodyParser = require("body-parser");
 
+let clientError = require("./clientError");
 let data = require("./data");
 let db = require("./db");
 let api = require("./api");
@@ -37,10 +38,20 @@ async function apiAsync(req, res) {
     let result = await api.callMethodAsync(context, method, args);
     res.json(result);
   } catch (err) {
-    console.error("API Error: " + callsig + " Error: " + err);
-    res.status(500).send({
-       message: "API Error: " + err,
-    });
+    if (clientError.isClientError(err)) {
+      res.status(520);
+      res.json({
+        CLIENT_ERROR: true,
+        code: err.code,
+        message: err.message,
+        props: err.props,
+      });
+    } else {
+      console.error("API Error: " + callsig + " Error: " + err);
+      res.status(500).send({
+         message: "API Error: " + err,
+      });
+    }
   }
 }
 

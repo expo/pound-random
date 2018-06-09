@@ -8,8 +8,10 @@ function clientError(code, message, props) {
 }
 
 function isClientError(err) {
-  return (err.type === 'CLIENT_ERROR');
+  return (err && err.type === 'CLIENT_ERROR');
 }
+
+clientError.isClientError = isClientError;
 
 module.exports = clientError;
 

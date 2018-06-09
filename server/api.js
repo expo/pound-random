@@ -29,8 +29,11 @@ class Api {
     return await db.queryAsync("SELECT * FROM fake_posts");
   }
 
-  async errorAsync() {
-    throw typedError("TEST_ERROR", "This is a test");
+  async errorAsync(code, message, props) {
+    code = code || "TEST_ERROR";
+    message = message || "An example ClientError";
+    props = props || {example: true};
+    throw clientError(code, message, props);
   }
 
   async sortOfLoginAsync(username) {
