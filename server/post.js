@@ -20,7 +20,7 @@ async function getLatestPostsAsync() {
   let results = await db.queryAsync("SELECT * FROM posts ORDER BY created_at DESC LIMIT 20");
   let posts = [];
   for (let i = 0; i < results.length; i++) {
-    posts.push({...results[i]});
+    posts.push({ ...results[i] });
   }
   return posts;
 }

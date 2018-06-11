@@ -30,11 +30,11 @@ class Api {
   sortOfSignupDoc() {
     return {
       doc: "Proto signup",
-      params: [{"username": "string", "mobileNumber": "string" }],
+      params: [{ "username": "string", "mobileNumber": "string" }],
     }
   }
 
-  async sortOfSignupAsync({username, mobileNumber}) {
+  async sortOfSignupAsync({ username, mobileNumber }) {
     return await signup.signupUserAsync(username, mobileNumber);
   }
 
@@ -45,7 +45,7 @@ class Api {
   async errorAsync(code, message, props) {
     code = code || "TEST_ERROR";
     message = message || "An example ClientError";
-    props = props || {example: true};
+    props = props || { example: true };
     throw clientError(code, message, props);
   }
 
@@ -54,7 +54,7 @@ class Api {
     // associated with this username
     let userId = await data.userIdForUsernameAsync(username);
     if (!userId) {
-      throw clientError("USERNAME_NOT_FOUND", "No user with the username '" + username + "'", {username});
+      throw clientError("USERNAME_NOT_FOUND", "No user with the username '" + username + "'", { username });
     }
 
     // Make a new session for this user
@@ -70,7 +70,7 @@ class Api {
     await session.expireSessionAsync(this.context.token);
   }
 
-  async createPostAsync({content, url, replyTo}) {
+  async createPostAsync({ content, url, replyTo }) {
     return await post.newPostAsync(this.context.userId, content, url, replyTo, new Date());
   }
 

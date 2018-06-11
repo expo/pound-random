@@ -2,8 +2,9 @@ let uuidV4 = require("uuid/v4");
 
 function makeUuid() {
 
-  let UUID_LENGTH = 22;
+  let UUID_LENGTH = 27;
   let UUID_ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_";
+  UUID_ALPHABET = "abcdefghijklmnopwrstuvwxz234679"
 
   let bytes = new Array(32);
   uuidV4(null, bytes, 0);
@@ -18,3 +19,4 @@ function makeUuid() {
 module.exports = {
   makeUuid,
 };
+

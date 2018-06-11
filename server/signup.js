@@ -17,7 +17,7 @@ function validateUsername(username) {
 }
 
 function normalizeUsername(username) {
-  return username.toLowerCase();
+  return username.toLowerCase().replace(".", "").replace("-", "_");
 }
 
 async function userIdExistsAsync(userId) {

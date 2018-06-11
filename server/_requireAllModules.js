@@ -1,7 +1,11 @@
-let fs = require("fs");
+let fs = require("fs/promises");
 
-function getModules() {
-  let files = fs.readdirSync(__dirname);
+function gray(x) {
+  return '\u001b[90m' + x + '\u001b[39m';
+}
+
+async function getModulesAsync() {
+  let files = await fs.readdir(__dirname);
   let modules = [];
   for (let i = 0; i < files.length; i++) {
     let f = files[i];
@@ -12,34 +16,74 @@ function getModules() {
   return modules;
 }
 
-function startupCommand() {
-  let ms = getModules();
-  let s = [];
-  for (let i = 0; i < ms.length; i++) {
-    // TODO: Do transformation if dashes or anything
-    let m = ms[i];
-    s.push('let ' + m + ' = require("./' + m + '");');
-  }
-  //s.push('console.log("\\nImported:\\n  ' + ms.join('\\n  ') + '\\n\\n");');
-  return s.join(" ");
+async function isDirAsync(p) {
+  let st = await fs.stat(p);
+  return st.isDirectory();
 }
 
-function requireModules() {
-  console.log();
-  let ms = getModules();
-  for (let i = 0; i < ms.length; i++) {
-    let m = ms[i];
-    if (m !== "_requireAllModules") {
-      console.log("Importing " + m + "...");
-      global[m] = require("./" + m);
+async function recursiveScanDirAsync(dir, acc) {
+  let files = await fs.readdir(dir);
+  for (let f of files) {
+
+    let blacklist = {
+      "node_modules": true,
+      ".git": true,
+      // "_requireAllModules.js": true,
+    }
+    if (blacklist.hasOwnProperty(f)) {
+      continue;
+    }
+
+    let p = path.join(dir, f);
+
+    if (await isDirAsync(p)) {
+      await recursiveScanDirAsync(p, acc);
+    } else if (f.endsWith(".js")) {
+      let v = f.substr(0, f.length - 3);
+      let fp = path.join(dir, f);
+
+      if (v === 'index') {
+        let p = path.parse(dir);
+        v = p.name;
+        fp = dir;
+      }
+
+      if (acc.hasOwnProperty(v)) {
+        throw new Error("Duplicate module name: " + v + " at " + fp + " and " + acc[v]);
+      } else {
+        acc[v] = fp;
+      }
+    } else {
+      // Some other kind of file; nothing to do
     }
   }
+  return acc;
+}
+
+async function recursiveRequireModulesAsync() {
+  let startTime = Date.now();
+  let allModules = await recursiveScanDirAsync(__dirname, {});
+  for (let name in allModules) {
+    let mp = allModules[name];
+    let sp = "." + mp.substr(__dirname.length);
+    // console.log("Importing " + name + gray(" " + sp + ""));
+    global[name] = require(allModules[name]);
+  }
+  let endTime = Date.now();
+  let t = endTime - startTime;
+  let mn = Object.keys(allModules);
+  mn.sort();
+  console.log(mn.length + " modules required in " + t + "ms");
+  console.log(mn.join(" "));
   process.stdout.write("> ");
 }
 
-requireModules();
+// recursiveRequireModulesAsync();
 
 module.exports = {
-  getModules,
-  requireModules,
+  getModulesAsync,
+  recursiveScanDirAsync,
+  isDirAsync,
+  recursiveRequireModulesAsync,
+  gray,
 }

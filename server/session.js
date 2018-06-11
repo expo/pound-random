@@ -19,5 +19,6 @@ async function expireSessionAsync(token) {
 module.exports = {
   newSessionAsync,
   expireSessionAsync,
+  makeToken,
 }
 
