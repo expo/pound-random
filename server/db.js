@@ -1,15 +1,23 @@
-let secret = require('../../pound-random-secret');
 let mysql = require('mysql');
-
 
 let _connected = false;
 let conn = null;
+
+function databaseInfo() {
+  try {
+    return require('../../pound-random-secret').database;
+  } catch (e) {
+    return require("/etc/secrets/pound-random-database");
+  }
+}
+
+let _databaseInfo = databaseInfo();
 
 function _connect() {
   if (_connected) {
     return false;
   } else {
-    conn = mysql.createConnection(secret.database);
+    conn = mysql.createConnection(_databaseInfo);
     conn.connect();
     _connected = true;
     return true;
@@ -40,6 +48,7 @@ async function queryAsync(q, ...rest) {
     });
   });
 }
+
 
 module.exports = {
   queryAsync,
