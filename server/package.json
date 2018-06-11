@@ -13,5 +13,8 @@
   },
   "scripts": {
     "start": "node ."
+  },
+  "devDependencies": {
+    "ip": "^1.1.5"
   }
 }
