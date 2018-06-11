@@ -25,7 +25,7 @@ export default class App extends React.Component {
       <View style={styles.container}>
         <StackNavigator />
         <StatusBar barStyle="dark-content" />
-         <SortOfLogin />
+        <SortOfLogin />
       </View>
     )
   }

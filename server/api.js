@@ -40,7 +40,8 @@ class Api {
   }
 
   async fakePostsAsync() {
-    return await db.queryAsync("SELECT * FROM fake_posts");
+    return [];
+    // return await db.queryAsync("SELECT * FROM fake_posts");
   }
 
   async errorAsync(code, message, props) {
