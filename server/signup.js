@@ -21,7 +21,7 @@ function normalizeUsername(username) {
 }
 
 async function userIdExistsAsync(userId) {
-  let result = await db.queryAsync("SELECT user_id FROM users WHERE user_id = ?", [userId]);
+  let result = await db.queryAsync("SELECT user_id FROM user WHERE user_id = ?", [userId]);
   return (result.length > 0);
 }
 
@@ -39,7 +39,7 @@ async function makeUserIdForUsernameAsync(username) {
 }
 
 async function writeSignupAsync(userId, username, displayUsername, mobileNumber) {
-  await db.queryAsync("INSERT INTO users (user_id, username, display_username, mobile_number, date_created) VALUES (?, ?, ?, ?, ?)", [userId, username, displayUsername, mobileNumber, new Date()]);
+  await db.queryAsync("INSERT INTO user (user_id, username, display_username, mobile_number, date_created) VALUES (?, ?, ?, ?, ?)", [userId, username, displayUsername, mobileNumber, new Date()]);
 }
 
 async function signupUserAsync(username, mobileNumber) {

@@ -8,16 +8,16 @@ function makePostId() {
 async function newPostAsync(userId, content, url, replyTo) {
   let postId = makePostId();
   let postTime = new Date();
-  let results = await db.queryAsync("INSERT INTO posts (post_id, reply_to, user_id, content, url, created_at) VALUES (?, ?, ?, ?, ?, ?)", [postId, replyTo, userId, content, url, postTime]);
+  let results = await db.queryAsync("INSERT INTO post (post_id, reply_to, user_id, content, url, created_at) VALUES (?, ?, ?, ?, ?, ?)", [postId, replyTo, userId, content, url, postTime]);
   return postId;
 }
 
 async function deletePostAsync(postId) {
-  await db.queryAsync("DELETE FROM posts WHERE post_id = ?", [postId]);
+  await db.queryAsync("DELETE FROM post WHERE post_id = ?", [postId]);
 }
 
 async function getLatestPostsAsync() {
-  let results = await db.queryAsync("SELECT * FROM posts ORDER BY created_at DESC LIMIT 20");
+  let results = await db.queryAsync("SELECT * FROM post ORDER BY created_at DESC LIMIT 20");
   let posts = [];
   for (let i = 0; i < results.length; i++) {
     posts.push({ ...results[i] });
