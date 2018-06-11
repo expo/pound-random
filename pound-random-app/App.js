@@ -9,7 +9,7 @@ import {
   TextInput,
   View
 } from "react-native";
-import { createStackNavigator } from "react-navigation";
+import { createStackNavigator, SafeAreaView } from "react-navigation";
 
 import Entry from "./screens/Entry";
 import Home from "./screens/Home";
@@ -22,10 +22,12 @@ const StackNavigator = createStackNavigator(
 export default class App extends React.Component {
   render() {
     return (
-      <View style={styles.container}>
-        <StatusBar barStyle="dark-content" />
-        <StackNavigator />
-      </View>
+      <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
+        <View style={styles.container}>
+          <StatusBar barStyle="dark-content" />
+          <StackNavigator persistenceKey="debug" />
+        </View>
+      </SafeAreaView>
     );
   }
 }
