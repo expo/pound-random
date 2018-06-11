@@ -2,10 +2,12 @@ let util = require("util");
 
 let bodyParser = require("body-parser");
 let express = require("express");
+let ip = require("ip");
+let keypress = require("keypress");
+let qrcodeTerminal = require("qrcode-terminal");
 
 let clientError = require("./clientError");
 let data = require("./data");
-let db = require("./db");
 let api = require("./api");
 
 let app = express();
@@ -78,5 +80,14 @@ let port = process.env.PORT || 3200;
 if (require.main === module) {
   app.listen(port, () => {
     console.log('Listening on port ' + port);
+
+    let addr = ip.address();
+    let lanUrl = "http://" + addr;
+    if (port !== 80) {
+      lanUrl += ":" + port;
+    }
+    lanUrl += "/";
+    console.log(lanUrl);
+    qrcodeTerminal.generate(lanUrl);
   });
 }

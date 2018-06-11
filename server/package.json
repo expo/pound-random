@@ -8,7 +8,9 @@
   "dependencies": {
     "body-parser": "^1.18.3",
     "express": "^4.16.3",
+    "keypress": "^0.2.1",
     "mysql": "^2.15.0",
+    "qrcode-terminal": "^0.12.0",
     "uuid": "^3.2.1"
   },
   "scripts": {

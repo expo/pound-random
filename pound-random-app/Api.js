@@ -2,19 +2,6 @@ import { AsyncStorage } from "react-native";
 
 import typedError from "./typedError";
 
-// let BASE_URL = "http://ec2-34-219-33-58.us-west-2.compute.amazonaws.com:3200/";
-let BASE_URL = "https://pound-random-server.render.com/";
-// let BASE_URL = "https://51b62f12.ngrok.io";
-// let BASE_URL = "http://192.168.1.124:3200/"
-
-try {
-  // let serverInfo = require("./serverInfo-generated");
-  // BASE_URL = "http://" + serverInfo.lanIpAddress + ":3200/";
-  // console.log("Using LAN for API at " + BASE_URL);
-} catch (e) {
-  console.log("No LAN URL found; using master server at " + BASE_URL);
-}
-
 function clientError(code, message, props) {
   let err = new Error(message);
   err.type = "CLIENT_ERROR";
@@ -29,6 +16,7 @@ class Api {
   }
 
   callMethodAsync = async (method, ...args) => {
+    let BASE_URL = await getBaseUrlAsync();
     let sa = JSON.stringify(args);
     sa = sa.substr(1, sa.length - 2);
     let callsig = method + "(" + sa + ")";
@@ -71,6 +59,13 @@ class Api {
   getSessionAsync = async () => {
     return await AsyncStorage.getItem("session");
   };
+}
+
+export async function getBaseUrlAsync() {
+  let BASE_URL = await AsyncStorage.getItem("BASE_URL");
+  BASE_URL = BASE_URL || "https://pound-random-server.render.com/";
+  return BASE_URL;
+
 }
 
 let api = new Api();

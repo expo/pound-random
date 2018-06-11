@@ -14,6 +14,8 @@ import { createStackNavigator, SafeAreaView } from "react-navigation";
 import Entry from "./screens/Entry";
 import Home from "./screens/Home";
 
+import QRCodeUrlReader from "./QRCodeUrlReader";
+
 const StackNavigator = createStackNavigator(
   { Entry, Home },
   { initialRouteName: "Entry", headerMode: "none" }
