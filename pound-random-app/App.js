@@ -28,6 +28,96 @@ export default class App extends React.Component {
       <View style={styles.container}>
         <StackNavigator />
         <StatusBar barStyle="dark-content" />
+        <Adder />
+        <Signup />
+        <SortOfLogin />
+        <ErrorButton />
+      </View>
+    );
+  }
+}
+
+class SortOfLogin extends React.Component {
+  state = {
+    username: null
+  };
+
+  _submitAsync = async () => {
+    let result = await Api.callMethodAsync("sortOfLogin", this.state.username);
+    await api.storeSessionAsync(result.token);
+    console.log(result);
+  };
+
+  render() {
+    return (
+      <View
+        style={{
+          marginBottom: 50
+        }}
+      >
+        <Text>Username:</Text>
+        <TextInput
+          autoCapitalize="none"
+          autoCorrect={false}
+          value={this.state.username}
+          onChangeText={text => {
+            this.setState({ username: text });
+          }}
+          onSubmitEditing={() => {
+            this._submitAsync();
+          }}
+        />
+        <Button
+          title="Login"
+          onPress={() => {
+            this._submitAsync();
+          }}
+        />
+        <Adder />
+        <Signup />
+        <SortOfLogin />
+        <ErrorButton />
+       </View>
+    );
+  }
+}
+
+class SortOfLogin extends React.Component {
+  state = {
+    username: null
+  };
+
+  _submitAsync = async () => {
+    let result = await Api.callMethodAsync("sortOfLogin", this.state.username);
+    await api.storeSessionAsync(result.token);
+    console.log(result);
+  };
+
+  render() {
+    return (
+      <View
+        style={{
+          marginBottom: 50
+        }}
+      >
+        <Text>Username:</Text>
+        <TextInput
+          autoCapitalize="none"
+          autoCorrect={false}
+          value={this.state.username}
+          onChangeText={text => {
+            this.setState({ username: text });
+          }}
+          onSubmitEditing={() => {
+            this._submitAsync();
+          }}
+        />
+        <Button
+          title="Login"
+          onPress={() => {
+            this._submitAsync();
+          }}
+        />
       </View>
     );
   }

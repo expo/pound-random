@@ -1,6 +1,7 @@
-let express = require("express");
+let util = require("util");
 
 let bodyParser = require("body-parser");
+let express = require("express");
 
 let clientError = require("./clientError");
 let data = require("./data");
@@ -54,7 +55,7 @@ async function apiAsync(req, res) {
         props: err.props,
       });
     } else {
-      console.error("API Error: " + callsig + " Error: " + err);
+      console.error("API Error: " + callsig + "\n" + util.inspect(err));
       res.status(500).send({
         message: "API Error: " + err,
       });

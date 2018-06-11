@@ -5,6 +5,7 @@ let post = require("./post");
 let session = require("./session");
 let signup = require("./signup");
 let typedError = require("./typedError");
+let username = require("./username");
 
 class Api {
 
@@ -49,12 +50,13 @@ class Api {
     throw clientError(code, message, props);
   }
 
-  async sortOfLoginAsync(username) {
+  async sortOfLoginAsync(rawUsername) {
     // Don't do any auth but just give a session for the userId 
     // associated with this username
-    let userId = await data.userIdForUsernameAsync(username);
+    let normalizedUsername = username.normalizeUsername(rawUsername);
+    let userId = await data.userIdForNormalizedUsernameAsync(normalizedUsername);
     if (!userId) {
-      throw clientError("USERNAME_NOT_FOUND", "No user with the username '" + username + "'", { username });
+      throw clientError("USERNAME_NOT_FOUND", "No user with the username '" + rawUsername + "'", { rawUsername, normalizedUsername });
     }
 
     // Make a new session for this user

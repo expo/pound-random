@@ -2,7 +2,10 @@ import { AsyncStorage } from "react-native";
 
 import typedError from "./typedError";
 
-let BASE_URL = "http://ec2-34-219-33-58.us-west-2.compute.amazonaws.com:3200/";
+// let BASE_URL = "http://ec2-34-219-33-58.us-west-2.compute.amazonaws.com:3200/";
+let BASE_URL = "https://pound-random-server.render.com/";
+// let BASE_URL = "https://51b62f12.ngrok.io";
+// let BASE_URL = "http://192.168.1.124:3200/"
 
 function clientError(code, message, props) {
   let err = new Error(message);
@@ -37,7 +40,10 @@ class Api {
       e.props = info.props;
       throw e;
     } else if (response.status !== 200) {
-      throw typedError("UNEXPECTED_API_STATUS_CODE", "Unexpected API status code: " + response.status);
+      let sa = JSON.stringify(args);
+      sa = sa.substr(1, sa.length - 2);
+      let callsig = method + "(" +  sa + ")";
+      throw typedError("UNEXPECTED_API_STATUS_CODE", "Unexpected API status code: " + response.status + " when trying to call " + callsig);
     }
     let result = await response.json();
     return result;

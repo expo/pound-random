@@ -13,7 +13,7 @@ async function getUserByIdAsync(userId) {
 async function addUserAsync(user) {
   let u = {...user};
   u.createdTime = u.createdTime || new Date();
-  let result = await db.queryAsync("INSERT INTO user (userId, noramlizedUsername, displayUsername, email, emailConfirmed, mobileNumber, mobileNumberConfirmed, hashedPassword, createdTime, updatedTime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", [u.userId, u.normalizedUsername, u.displayUsername,u.email, u.emailConfirmed, u.mobileNumber, u.mobileNumberConfirmed, u.hashedPassword, u.createdTime || new Date(), u.updatedTime || new Date()]);
+  let result = await db.queryAsync("INSERT INTO user (userId, normalizedUsername, displayUsername, email, emailConfirmed, mobileNumber, mobileNumberConfirmed, hashedPassword, createdTime, updatedTime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", [u.userId, u.normalizedUsername, u.displayUsername,u.email, u.emailConfirmed, u.mobileNumber, u.mobileNumberConfirmed, u.hashedPassword, u.createdTime || new Date(), u.updatedTime || new Date()]);
   return u.userId;
 }
 
@@ -33,8 +33,8 @@ async function userForTokenAsync(token) {
   }
 }
 
-async function userIdForUsernameAsync(username) {
-  let result = await db.queryAsync("SELECT userId FROM user WHERE username = ?", [username]);
+async function userIdForNormalizedUsernameAsync(normalizedUsername) {
+  let result = await db.queryAsync("SELECT userId FROM user WHERE normalizedUsername = ?", [normalizedUsername]);
   if (result.length > 0) {
     return result[0].user_id;
   }
@@ -46,5 +46,5 @@ module.exports = {
   createSessionAsync,
   deleteSessionAsync,
   userForTokenAsync,
-  userIdForUsernameAsync,
+  userIdForNormalizedUsernameAsync,
 };

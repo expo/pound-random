@@ -3,30 +3,15 @@ let compactUuid = require("./compactUuid");
 let data = require("./data");
 let db = require("./db");
 let session = require("./session");
-
-USERNAME_REGEX = /^[a-zA-Z0-9\.-_]*$/;
-USERNAME_MIN_LENGTH = 2;
-USERNAME_MAX_LENGTH = 80;
-
-function validateUsername(username) {
-  return (
-    USERNAME_REGEX.test(username) && 
-    username.length >= USERNAME_MIN_LENGTH &&
-    username.length <= USERNAME_MAX_LENGTH
-  );
-}
-
-function normalizeUsername(username) {
-  return username.toLowerCase().replace(".", "").replace("-", "_");
-}
+let username = require("./username");
 
 async function userIdExistsAsync(userId) {
   let result = await db.queryAsync("SELECT userId FROM user WHERE userId = ?", [userId]);
   return (result.length > 0);
 }
 
-async function makeUserIdForUsernameAsync(username) {
-  let x = "user:" + username;
+async function makeUserIdForNormalizedUsernameAsync(normalizedUsername) {
+  let x = "user:" + normalizedUsername;
   // Yes this is susceptible to race conditions
   while (true) {
     if (await userIdExistsAsync(x)) {
@@ -38,27 +23,27 @@ async function makeUserIdForUsernameAsync(username) {
   return x;
 }
 
-async function writeSignupAsync(userId, username, displayUsername, mobileNumber) {
+async function writeSignupAsync(userId, normalizedUsername, displayUsername, mobileNumber) {
   // TODO: Keep changing queries here (CDC)
-  await db.queryAsync("INSERT INTO user (userId, normalizedUsername, displayUsername, mobileNumber, createdTime, udpatedTime) VALUES (?, ?, ?, ?, ?)", [userId, username, displayUsername, mobileNumber, new Date()]);
+  await db.queryAsync("INSERT INTO user (userId, normalizedUsername, displayUsername, mobileNumber, createdTime, updatedTime) VALUES (?, ?, ?, ?, ?, ?)", [userId, normalizedUsername, displayUsername, mobileNumber, new Date(), new Date()]);
 }
 
-async function signupUserAsync(username, mobileNumber) {
+async function signupUserAsync(rawUsername, mobileNumber) {
   // Check to see if this user exists already (yes there is a race condition
   // that could happen here; we still need to check for failed writes)
 
-  if (!validateUsername(username)) {
-    throw clientError("INVALID_USERNAME", "Invalid username '" + username + "'. Usernames must be between 2 and 80 characters and only contain [a-zA-Z0-9.-_]", {username});
+  if (!username.validateUsername(rawUsername)) {
+    throw clientError("INVALID_USERNAME", "Invalid username '" + rawUsername + "'. Usernames must be between 2 and 80 characters and only contain [a-zA-Z0-9.-_]", {username: rawUsername});
   }
-  let nUsername = normalizeUsername(username);
+  let normalizedUsername = username.normalizeUsername(rawUsername);
 
-  if (await data.userIdForUsernameAsync(nUsername)) {
-    throw clientError("USERNAME_TAKEN", "The username '" + username + "' is already taken.", {username: nUsername});
+  if (await data.userIdForNormalizedUsernameAsync(normalizedUsername)) {
+    throw clientError("USERNAME_TAKEN", "The username '" + rawUsername + "' is already taken.", {username: rawUsername, normalizedUsername,});
   }
 
-  let userId = await makeUserIdForUsernameAsync(username);
+  let userId = await makeUserIdForNormalizedUsernameAsync(normalizedUsername);
 
-  await writeSignupAsync(userId, nUsername, username, mobileNumber);
+  await writeSignupAsync(userId, normalizedUsername, rawUsername, mobileNumber);
 
   let token = await session.newSessionAsync(userId);
   return {
@@ -69,10 +54,7 @@ async function signupUserAsync(username, mobileNumber) {
 }
 
 module.exports = {
-  USERNAME_REGEX,
-  normalizeUsername,
-  validateUsername,
-  makeUserIdForUsernameAsync,
+  makeUserIdForNormalizedUsernameAsync,
   signupUserAsync,
 };
 
