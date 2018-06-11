@@ -1,8 +1,3 @@
-<<<<<<< HEAD
-import { Button, FlatList, Text, TextInput, View, StyleSheet } from "react-native";
-||||||| merged common ancestors
-import { Button, Text, TextInput, View, StyleSheet } from "react-native";
-=======
 import {
   Button,
   Text,
@@ -11,7 +6,6 @@ import {
   StyleSheet,
   FlatList
 } from "react-native";
->>>>>>> [login] create a nearly static login screen
 import React from "react";
 
 import Api from "../Api";
