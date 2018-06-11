@@ -1,24 +1,37 @@
+<<<<<<< HEAD
 import { Button, FlatList, Text, TextInput, View, StyleSheet } from "react-native";
+||||||| merged common ancestors
+import { Button, Text, TextInput, View, StyleSheet } from "react-native";
+=======
+import {
+  Button,
+  Text,
+  TextInput,
+  View,
+  StyleSheet,
+  FlatList
+} from "react-native";
+>>>>>>> [login] create a nearly static login screen
 import React from "react";
 
 import Api from "../Api";
 import Signup from "../Signup";
 
-export default class Login extends React.Component {
+export default class Home extends React.Component {
   static navigationOptions = {
-    header: null,
+    header: null
   };
 
   state = {
     username: "",
-    mobileNumber: "",
+    mobileNumber: ""
   };
 
   _sortOfSignupAsync = async () => {
     try {
       let result = await Api.callMethodAsync("sortOfSignup", {
         username: this.state.username,
-        mobileNumber: this.state.mobileNumber,
+        mobileNumber: this.state.mobileNumber
       });
       console.log(result);
     } catch (err) {
@@ -28,16 +41,16 @@ export default class Login extends React.Component {
 
   render() {
     let s = {
-      fontSize: 40,
+      fontSize: 40
     };
 
     return (
       <View style={styles.container}>
         <Text>i'm home</Text>
 
-        <Adder />
+        {/* <Adder />
         <ErrorButton />
-        <FakePosts />
+        <FakePosts /> */}
       </View>
     );
   }
@@ -46,7 +59,7 @@ export default class Login extends React.Component {
 class FakePosts extends React.Component {
   state = {
     loaded: false,
-    data: null,
+    data: null
   };
 
   _loadDataAsync = async () => {
@@ -64,7 +77,7 @@ class FakePosts extends React.Component {
         <View
           style={{
             marginTop: 40,
-            flex: 1,
+            flex: 1
           }}
         >
           <FlatList
@@ -74,12 +87,12 @@ class FakePosts extends React.Component {
                 <View
                   style={{
                     borderColor: "gray",
-                    borderWidth: 1,
+                    borderWidth: 1
                   }}
                 >
                   <Text
                     style={{
-                      fontWeight: "bold",
+                      fontWeight: "bold"
                     }}
                   >
                     {item.title}
@@ -102,7 +115,7 @@ class Adder extends React.Component {
     a: "0",
     b: "0",
     result: null,
-    loading: false,
+    loading: false
   };
 
   _updateAsync = async () => {
@@ -121,7 +134,7 @@ class Adder extends React.Component {
 
   render() {
     let s = {
-      fontSize: 60,
+      fontSize: 60
     };
     return (
       <View>
@@ -158,7 +171,7 @@ class Adder extends React.Component {
 class SimpleAdd extends React.Component {
   state = {
     loading: false,
-    result: null,
+    result: null
   };
 
   _addAsync = async () => {
@@ -184,7 +197,7 @@ class SimpleAdd extends React.Component {
 
 class SortOfLogin extends React.Component {
   state = {
-    username: null,
+    username: null
   };
 
   _submitAsync = async () => {
@@ -197,7 +210,7 @@ class SortOfLogin extends React.Component {
     return (
       <View
         style={{
-          marginBottom: 50,
+          marginBottom: 50
         }}
       >
         <Text>Username:</Text>
@@ -252,9 +265,9 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "white",
+    backgroundColor: "white"
   },
   textInput: {
-    fontSize: 40,
-  },
+    fontSize: 40
+  }
 });
