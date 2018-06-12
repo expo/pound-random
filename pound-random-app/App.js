@@ -13,22 +13,30 @@ import { createStackNavigator, SafeAreaView } from "react-navigation";
 
 import Entry from "./screens/Entry";
 import Home from "./screens/Home";
+import MiscSettings from "./screens/MiscSettings";
 
 import QRCodeUrlReader from "./QRCodeUrlReader";
 
 const StackNavigator = createStackNavigator(
-  { Entry, Home },
+  { Entry, Home, MiscSettings },
   { initialRouteName: "Entry", headerMode: "none" }
 );
 
 export default class App extends React.Component {
+  constructor(props, context) {
+    super(props, context);
+    this.navigatorRef = React.createRef();
+  }
   render() {
     return (
       <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
         <View style={styles.container}>
           <StatusBar barStyle="dark-content" />
-          <StackNavigator persistenceKey="debug" />
+          <StackNavigator ref={this.navigatorRef} persistenceKey="debug" />
         </View>
+        <Button title="Go to Misc. Settings Etc." onPress={() => {
+          this.navigatorRef.current._navigation.navigate("MiscSettings");
+        }} />
       </SafeAreaView>
     );
   }
