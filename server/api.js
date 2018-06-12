@@ -30,13 +30,17 @@ class Api {
     return user;
   }
 
-  async addAsync(a, b) {
-    return a + b;
+
+  async newPostAsync({ content, url, replyTo }) {
+    let userId = this.context.userId;
+    let postId = await post.newPostAsync(userId, content, url, replyTo);
+    return postId;
   }
 
-  async subtractAsync(a, b) {
-    return a - b;
+  async getPostAsync(postId) {
+    return post.getPostAsync(postId);
   }
+
 
   sortOfSignupDoc() {
     return {
@@ -92,6 +96,13 @@ class Api {
     return await post.deletePostByUserAsync(postId, this.context.userId);
   }
 
+  async addAsync(a, b) {
+    return a + b;
+  }
+
+  async subtractAsync(a, b) {
+    return a - b;
+  }
 
   __doc__Doc() {
     return {

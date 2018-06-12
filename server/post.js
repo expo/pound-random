@@ -8,8 +8,12 @@ function makePostId() {
 async function newPostAsync(userId, content, url, replyTo) {
   let postId = makePostId();
   let postTime = new Date();
-  let results = await db.queryAsync("INSERT INTO post (post_id, reply_to, user_id, content, url, created_at) VALUES (?, ?, ?, ?, ?, ?)", [postId, replyTo, userId, content, url, postTime]);
+  let results = await db.queryAsync("INSERT INTO post (postId, content, url, userId, replyTo, createdTime, updatedTime) VALUES (?, ?, ?, ?, ?, ?, ?);", [postId, content, url, userId, replyTo, postTime, postTime]);
   return postId;
+}
+
+async function getPostAsync(postId) {
+  return await data.getObjectAsync(postId, 'post');
 }
 
 async function deletePostAsync(postId) {
@@ -26,6 +30,7 @@ async function getLatestPostsAsync() {
 }
 
 module.exports = {
+  getPostAsync,
   newPostAsync,
   deletePostAsync,
   getLatestPostsAsync,

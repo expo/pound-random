@@ -40,11 +40,37 @@ async function userIdForNormalizedUsernameAsync(normalizedUsername) {
   }
 }
 
+async function getObjectAsync(id, table, opts) {
+  table = table || id.replace(/:.*$/, "");
+  opts = opts || {};
+  let column = opts.column || table + "Id";
+  let results = await db.queryAsync("SELECT * FROM " + table + " WHERE " + column + " = ?", [id]);
+  if (results.length === 1) {
+    return Object.assign({}, results[0]);
+  }
+}
+
+async function getObjectsAsync(idList, table, opts) {
+  opts = opts || {};
+  let column = opts.column || table + "Id";
+  idList.map
+  let results = await db.queryAsync("SELECT * FROM " + table + " WHERE " + column + " IN (" + idList.map(() => '?').join(", ") + ");", idList);
+  let x = {};
+  for (let r of results) {
+    let obj = Object.assign({}, r);
+    let id = obj[column];
+    x[id] = obj;
+  }
+  return x;
+}
+
 module.exports = {
+  getObjectsAsync,
   getUserByIdAsync,
   addUserAsync,
   createSessionAsync,
   deleteSessionAsync,
   userForTokenAsync,
   userIdForNormalizedUsernameAsync,
+  getObjectAsync,
 };
