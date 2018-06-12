@@ -7,7 +7,11 @@ function databaseInfo() {
   try {
     return require('../../pound-random-secret').database;
   } catch (e) {
-    return require("/etc/secrets/pound-random-database");
+    try {
+      return require("/etc/secrets/pound-random-database");
+    } catch (e) {
+      console.log("Didn't find database configuration. Try cloning https://github.com/expo/pound-random-secret into the same parent directory that the pound-random project is in.");
+    }
   }
 }
 
