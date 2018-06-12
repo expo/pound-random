@@ -20,6 +20,16 @@ class Api {
     };
   }
 
+  async __contextAsync() {
+    return this.context;
+  }
+
+  async whoAmIAsync() {
+    let userId = this.context.userId;
+    let user = await data.getUserByIdAsync(userId);
+    return user;
+  }
+
   async addAsync(a, b) {
     return a + b;
   }
