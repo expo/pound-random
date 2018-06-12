@@ -56,6 +56,12 @@ async function getObjectsAsync(idList, table, opts) {
   idList.map
   let results = await db.queryAsync("SELECT * FROM " + table + " WHERE " + column + " IN (" + idList.map(() => '?').join(", ") + ");", idList);
   let x = {};
+
+  // Put in nulls so we know what things were missing
+  for (let id of idList) {
+    x[id] = null;
+  }
+
   for (let r of results) {
     let obj = Object.assign({}, r);
     let id = obj[column];
