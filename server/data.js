@@ -7,13 +7,13 @@ async function getUserByIdAsync(userId) {
     throw new typedError("NOT_FOUND", "No user found for userId " + userId);
   }
   // Make it just a plain JS object
-  return {...result[0]};
+  return { ...result[0] };
 }
 
 async function addUserAsync(user) {
-  let u = {...user};
+  let u = { ...user };
   u.createdTime = u.createdTime || new Date();
-  let result = await db.queryAsync("INSERT INTO user (userId, normalizedUsername, displayUsername, email, emailConfirmed, mobileNumber, mobileNumberConfirmed, hashedPassword, createdTime, updatedTime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", [u.userId, u.normalizedUsername, u.displayUsername,u.email, u.emailConfirmed, u.mobileNumber, u.mobileNumberConfirmed, u.hashedPassword, u.createdTime || new Date(), u.updatedTime || new Date()]);
+  let result = await db.queryAsync("INSERT INTO user (userId, normalizedUsername, displayUsername, email, emailConfirmed, mobileNumber, mobileNumberConfirmed, hashedPassword, createdTime, updatedTime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", [u.userId, u.normalizedUsername, u.displayUsername, u.email, u.emailConfirmed, u.mobileNumber, u.mobileNumberConfirmed, u.hashedPassword, u.createdTime || new Date(), u.updatedTime || new Date()]);
   return u.userId;
 }
 
@@ -53,7 +53,6 @@ async function getObjectAsync(id, table, opts) {
 async function getObjectsAsync(idList, table, opts) {
   opts = opts || {};
   let column = opts.column || table + "Id";
-  idList.map
   let results = await db.queryAsync("SELECT * FROM " + table + " WHERE " + column + " IN (" + idList.map(() => '?').join(", ") + ");", idList);
   let x = {};
 
