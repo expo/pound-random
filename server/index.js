@@ -104,6 +104,11 @@ function getMyLanUrl() {
   return lanUrl;
 }
 
+app.get("/--/health", (req, res) => {
+  res.status(200);
+  res.send("OK");
+});
+
 app.get("/--/status", (req, res) => {
   (async () => {
 
