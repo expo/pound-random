@@ -47,7 +47,6 @@ export default class TextPost extends Component {
           <Text style={styles.meta}>
             {moment(this.props.post.createdTime).fromNow()}
           </Text>
-          <Text style={styles.meta}>#{"all"}</Text>
           {this.props.post.userId && (
             <Text style={styles.meta}>
               @{this.props.post.userId.split(":")[1]}

@@ -51,9 +51,8 @@ export default class Home extends React.Component {
           renderItem={({ item }) => <TextPost post={item} />}
           ItemSeparatorComponent={Separator}
         />
-        <TouchableOpacity style={styles.currentTagContainer}>
-          <Text style={styles.currentTag}>all</Text>
-          <Feather name="chevron-up" size={24} color="black" />
+        <TouchableOpacity style={styles.createNewPostContainer}>
+          <Text style={styles.createNewPost}>NEW POST</Text>
         </TouchableOpacity>
       </View>
     );
@@ -69,12 +68,13 @@ const styles = StyleSheet.create({
   textInput: {
     fontSize: 40
   },
-  currentTagContainer: {
+  createNewPostContainer: {
     padding: 16,
     flexDirection: "row",
     alignItems: "center"
   },
-  currentTag: {
-    fontSize: 20
+  createNewPost: {
+    fontSize: 20,
+    fontWeight: "600"
   }
 });

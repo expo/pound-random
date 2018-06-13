@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { StyleSheet, View, Text, Dimensions } from "react-native";
+import moment from "moment";
 
 const content = {
   image: null,
@@ -54,7 +55,9 @@ export default class MediaPost extends Component {
         <View style={styles.placeHolderImage} />
         <Text style={styles.body}>{content.body}</Text>
         <View style={styles.metaContainer}>
-          <Text style={styles.meta}>#{content.tags[0]}</Text>
+          <Text style={styles.meta}>
+            {moment(this.props.post.createdTime).fromNow()}
+          </Text>
           <Text style={styles.meta}>@{content.author.displayName}</Text>
         </View>
       </View>

@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { StyleSheet, View, Text, Dimensions } from "react-native";
+import moment from "moment";
 
 const content = {
   link: "https://this.is.awebsite.co/...",
@@ -81,7 +82,9 @@ export default class LinkPost extends Component {
         <View style={styles.separator} />
         <Text style={styles.body}>{content.body}</Text>
         <View style={styles.metaContainer}>
-          <Text style={styles.meta}>#{content.tags[0]}</Text>
+          <Text style={styles.meta}>
+            {moment(this.props.post.createdTime).fromNow()}
+          </Text>
           <Text style={styles.meta}>@{content.author.displayName}</Text>
         </View>
       </View>
