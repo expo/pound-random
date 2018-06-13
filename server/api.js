@@ -46,6 +46,10 @@ class Api {
     return post.getPostAsync(postId);
   }
 
+  async feedAsync() {
+    return await post.buildFeedAsync();
+  }
+
 
   sortOfSignupDoc() {
     return {

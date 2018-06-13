@@ -31,13 +31,19 @@ async function multigetPostsAsync(postIdList) {
   return await data.multigetObjectsAsync(postIdList, "post", { column: 'postId' });
 }
 
-async function getLatestPostsAsync() {
-  let results = await db.queryAsync("SELECT * FROM post ORDER BY createdTime DESC LIMIT 20");
+async function getLatestPostsAsync(limit=20) {
+  let results = await db.queryAsync("SELECT * FROM post ORDER BY createdTime DESC LIMIT " + limit);
   let posts = [];
   for (let p of results) {
     posts.push({ ...p });
   }
   return posts;
+}
+
+async function buildFeedAsync() {
+  let latestPosts = await getLatestPostsAsync();
+  let annotatedPosts = await annotatePostsAsync(latestPosts);
+  return annotatedPosts;
 }
 
 async function annotatePostsAsync(postList) {
@@ -78,6 +84,7 @@ async function getInfoAboutPostAsync(p) {
 }
 
 module.exports = {
+  buildFeedAsync,
   annotatePostsAsync,
   getPostAsync,
   multigetPostsAsync,
