@@ -28,16 +28,23 @@ export default class Feed extends React.Component {
         <FlatList
           keyExtractor={(x) => { return x.postId }}
           data={this.state.posts}
-          renderItem={(post) => (
-            <View key={post.postId}>
+          renderItem={({item}) => {
+            let post = item;
+            console.log(post, post.extra);
+            return (
+            <View key={post.postId} style={{
+              backgroundColor: 'yellow',
+              width: 300,
+              height: 100,
+            }}>
               <TouchableHighlight key={post.postId} onPress={() => this._onPress(post)}>
-                <View style={{ backgroundColor: 'white' }}>
+                <View style={{ backgroundColor: 'gray' }}>
                   <Text>{post.extra.headline}</Text>
                   <Text>{post.userId}</Text>
                 </View>
               </TouchableHighlight>
             </View>
-          )}
+          ); }}
         />
       </View>
     );

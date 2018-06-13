@@ -67,7 +67,9 @@ async function getInfoAboutPostAsync(p) {
   let headline = content.split("\n", 1)[0];
   // TODO: Make this smarter
   let MAX_HEADLINE_LENGTH = 255;
+  let truncatedHeadline = false;
   if (headline.length > MAX_HEADLINE_LENGTH) {
+    truncatedHeadline = true;
     headline = headline.substr(0, MAX_HEADLINE_LENGTH);
   }
 
@@ -79,6 +81,7 @@ async function getInfoAboutPostAsync(p) {
   return {
     headline,
     rest,
+    truncatedHeadline,
   };
 
 }
