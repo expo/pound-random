@@ -10,6 +10,7 @@ import {
   TouchableOpacity
 } from "react-native";
 import Expo from "expo";
+import { Feather } from "@expo/vector-icons";
 
 import Api from "../Api";
 
@@ -17,7 +18,8 @@ export default class NewPost extends React.Component {
   state = {
     text: "",
     linkInfo: null,
-    url: null
+    url: null,
+    image: null
   };
 
   componentDidMount() {
@@ -40,6 +42,7 @@ export default class NewPost extends React.Component {
     } else {
       this.setState({ linkInfo: null, url: null });
     }
+    console.log(this.state);
   };
 
   _submitAsync = async () => {
@@ -59,7 +62,30 @@ export default class NewPost extends React.Component {
     }
   };
 
+  _pickImage = async () => {
+    const { Permissions } = Expo;
+    const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+
+    if (status !== "granted") {
+      alert("Camera Roll permission not granted");
+      return;
+    }
+
+    let result = await Expo.ImagePicker.launchImageLibraryAsync({
+      allowsEditing: true,
+      aspect: [4, 3]
+    });
+
+    console.log(result);
+
+    if (!result.cancelled) {
+      this.setState({ image: result.uri });
+    }
+  };
+
   render() {
+    const { image } = this.state;
+
     return (
       <View
         style={{
@@ -69,6 +95,9 @@ export default class NewPost extends React.Component {
           backgroundColor: "white"
         }}
       >
+        {image && (
+          <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />
+        )}
         <TextInput
           style={{
             width: Dimensions.get("window").width - 48,
@@ -92,6 +121,22 @@ export default class NewPost extends React.Component {
             this.setState({ text });
           }}
         />
+        <TouchableOpacity
+          onPress={() => {
+            this._pickImage();
+          }}
+          style={{
+            justifyContent: "center",
+            alignItems: "center",
+            backgroundColor: "#828282",
+            paddingHorizontal: 32,
+            paddingVertical: 8,
+            marginVertical: 8,
+            borderRadius: 8
+          }}
+        >
+          <Feather name="image" size={16} color="white" />
+        </TouchableOpacity>
         {this.state.linkInfo && (
           <View>
             <Text>{this.state.url}</Text>
