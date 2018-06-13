@@ -15,6 +15,7 @@ import TextPost from "../components/FeedPosts/TextPost";
 import MediaPost from "../components/FeedPosts/MediaPost";
 import LinkPost from "../components/FeedPosts/LinkPost";
 import Api from "../Api";
+import { Feather } from "@expo/vector-icons";
 
 const Separator = () => <View style={{ height: 8 }} />;
 
@@ -50,6 +51,10 @@ export default class Home extends React.Component {
           renderItem={({ item }) => <TextPost post={item} />}
           ItemSeparatorComponent={Separator}
         />
+        <TouchableOpacity style={styles.currentTagContainer}>
+          <Text style={styles.currentTag}>all</Text>
+          <Feather name="chevron-up" size={24} color="black" />
+        </TouchableOpacity>
       </View>
     );
   }
@@ -63,5 +68,13 @@ const styles = StyleSheet.create({
   },
   textInput: {
     fontSize: 40
+  },
+  currentTagContainer: {
+    padding: 16,
+    flexDirection: "row",
+    alignItems: "center"
+  },
+  currentTag: {
+    fontSize: 24
   }
 });
