@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { StyleSheet, View, Text, Dimensions } from "react-native";
+import moment from "moment";
 
 const content = {
   body:
@@ -43,6 +44,9 @@ export default class TextPost extends Component {
       <View style={styles.container}>
         <Text style={styles.body}>{this.props.post.content}</Text>
         <View style={styles.metaContainer}>
+          <Text style={styles.meta}>
+            {moment(this.props.post.createdTime).fromNow()}
+          </Text>
           <Text style={styles.meta}>#{"all"}</Text>
           {this.props.post.userId && (
             <Text style={styles.meta}>
