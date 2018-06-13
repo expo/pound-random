@@ -161,6 +161,8 @@ if (require.main === module) {
     console.log();
     _apiStats.startTime = Date.now();
     console.log(lanUrl);
-    qrcodeTerminal.generate(lanUrl);
+    if (process.stdout.isTTY) {
+      qrcodeTerminal.generate(lanUrl);
+    }
   });
 }
