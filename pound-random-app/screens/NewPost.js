@@ -1,5 +1,14 @@
 import React from "react";
-import { Button, Clipboard, Image, Text, TextInput, View } from "react-native";
+import {
+  Button,
+  Clipboard,
+  Image,
+  Text,
+  TextInput,
+  View,
+  Dimensions,
+  TouchableOpacity
+} from "react-native";
 import Expo from "expo";
 
 import Api from "../Api";
@@ -60,15 +69,25 @@ export default class NewPost extends React.Component {
           backgroundColor: "white"
         }}
       >
-        <Text>New Post</Text>
         <TextInput
           style={{
-            width: "80%",
-            marginVertical: 16,
-            borderBottomColor: "palevioletred",
-            borderBottomWidth: 2
+            width: Dimensions.get("window").width - 48,
+            backgroundColor: "#C4C4C4",
+            borderRadius: 12,
+            paddingLeft: 16,
+            paddingRight: 16,
+            paddingTop: 16,
+            paddingBottom: 16,
+            textAlignVertical: "center",
+            justifyContent: "center",
+            alignItems: "center",
+            fontSize: 18,
+            fontWeight: "600"
           }}
+          multiline
+          underlineColorAndroid="transparent"
           autoFocus
+          placeholder="Deep thoughts go here 🧐"
           onChangeText={text => {
             this.setState({ text });
           }}
@@ -86,12 +105,33 @@ export default class NewPost extends React.Component {
           </View>
         )}
 
-        <Button
-          title="Submit"
-          onPress={() => {
-            this._submitAsync();
+        <View
+          style={{
+            position: "absolute",
+            bottom: 0,
+            paddingVertical: 24,
+            flexDirection: "row",
+            width: "100%",
+            alignItems: "center"
           }}
-        />
+        >
+          <TouchableOpacity
+            onPress={() => {
+              this.props.navigation.goBack();
+            }}
+            style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+          >
+            <Text style={{ fontSize: 24, fontWeight: "600" }}>DISCARD</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+            onPress={() => {
+              this._submitAsync();
+            }}
+          >
+            <Text style={{ fontSize: 24, fontWeight: "600" }}>POST</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     );
   }

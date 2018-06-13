@@ -63,7 +63,7 @@ const DebugButton = ({ onPress }) => (
       borderRadius: 32,
       backgroundColor: "palevioletred",
       position: "absolute",
-      bottom: 64,
+      bottom: 96,
       right: 32,
       justifyContent: "center",
       alignItems: "center"
