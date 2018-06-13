@@ -89,7 +89,11 @@ class Api {
   }
 
   async createPostAsync({ content, url, replyTo }) {
-    return await post.newPostAsync(this.context.userId, content, url, replyTo, new Date());
+    let userId = this.context.userId;
+    if (!userId) {
+      throw clientError("LOGIN_REQUIRED", "Login required to post");
+    }
+    return await post.newPostAsync(userId, content, url, replyTo, new Date());
   }
 
   async deletePostAsync(postId) {
