@@ -5,6 +5,7 @@ import {
   FlatList,
   StatusBar,
   StyleSheet,
+  TouchableOpacity,
   Text,
   TextInput,
   View
@@ -34,10 +35,9 @@ export default class App extends React.Component {
       <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
         <View style={styles.container}>
           <StatusBar barStyle="dark-content" />
-          <StackNavigator ref={this.navigatorRef} persistenceKey={"deBug"} />
+          <StackNavigator ref={this.navigatorRef} persistenceKey={"deBUg"} />
         </View>
-        <Button
-          title="Go to Misc. Settings Etc."
+        <DebugButton
           onPress={() => {
             this.navigatorRef.current._navigation.navigate("MiscSettings");
           }}
@@ -46,6 +46,25 @@ export default class App extends React.Component {
     );
   }
 }
+
+const DebugButton = ({ onPress }) => (
+  <TouchableOpacity
+    style={{
+      height: 64,
+      width: 64,
+      borderRadius: 32,
+      backgroundColor: "palevioletred",
+      position: "absolute",
+      bottom: 64,
+      right: 32,
+      justifyContent: "center",
+      alignItems: "center"
+    }}
+    onPress={onPress}
+  >
+    <Text>🐛</Text>
+  </TouchableOpacity>
+);
 
 const styles = StyleSheet.create({
   container: {
