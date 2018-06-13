@@ -1,3 +1,4 @@
+let data = require("./data");
 let db = require("./db");
 let compactUuid = require("./compactUuid");
 
@@ -7,8 +8,14 @@ function makePostId() {
 
 async function newPostAsync(userId, content, url, replyTo) {
   let postId = makePostId();
-  let postTime = new Date();
-  let results = await db.queryAsync("INSERT INTO post (postId, content, url, userId, replyTo, createdTime, updatedTime) VALUES (?, ?, ?, ?, ?, ?, ?);", [postId, content, url, userId, replyTo, postTime, postTime]);
+  let results = await data.writeNewObjectAsync({
+    postId,
+    content,
+    url,
+    userId,
+    replyTo,
+  }, "post");
+  // let results = await db.queryAsync("INSERT INTO post (postId, content, url, userId, replyTo, createdTime, updatedTime) VALUES (?, ?, ?, ?, ?, ?, ?);", [postId, content, url, userId, replyTo, postTime, postTime]);
   return postId;
 }
 

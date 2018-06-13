@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Text, TextInput, View } from 'react-native';
+import { Button, Clipboard, Text, TextInput, View } from 'react-native';
 import Expo from 'expo';
 
 import Api from "../Api";
@@ -8,6 +8,22 @@ export default class NewPost extends React.Component {
 
   state = {
     text: '',
+  }
+
+  componentDidMount() {
+    this._setupAsync();
+  }
+
+  _setupAsync = async () => {
+
+    console.log("_setupAsync();")
+    let clipboardContent = await Clipboard.getString();
+
+    if (clipboardContent.startsWith("http://") || clipboardContent.startsWith("https://")) {
+      console.log("URL in clipboard:", clipboardContent);
+    }
+
+
   }
 
   _submitAsync = async () => {

@@ -4,6 +4,29 @@ function gray(x) {
   return '\u001b[90m' + x + '\u001b[39m';
 }
 
+function varNameForModule(m) {
+  let v = "";
+  let capNext = false;
+  for (let c of m) {
+    switch (c) {
+      case '-':
+        capNext = true;
+        break;
+      case '.':
+        break;
+      default:
+        if (capNext) {
+          v += c.toUpperCase();
+        } else {
+          v += c;
+        }
+        capNext = false;
+        break;
+      }
+    }
+  return v;
+}
+
 async function getModulesAsync() {
   let files = await fs.readdir(__dirname);
   let modules = [];
@@ -60,20 +83,31 @@ async function recursiveScanDirAsync(dir, acc) {
   return acc;
 }
 
+
+
 async function recursiveRequireModulesAsync() {
   let startTime = Date.now();
+  let pkg = require("./package.json");
+  let deps = Object.keys(pkg.dependencies || {});
+  let devDeps = []; // Object.keys(pkg.devDependencies || {});
+  let allDeps = [].concat(devDeps, deps).sort();
+  for (let name of allDeps) {
+    global[varNameForModule(name)] = require(name);
+  }
+  
   let allModules = await recursiveScanDirAsync(__dirname, {});
   for (let name in allModules) {
     let mp = allModules[name];
     let sp = "." + mp.substr(__dirname.length);
     // console.log("Importing " + name + gray(" " + sp + ""));
-    global[name] = require(allModules[name]);
+    global[varNameForModule(name)] = require(allModules[name]);
   }
   let endTime = Date.now();
   let t = endTime - startTime;
   let mn = Object.keys(allModules);
   mn.sort();
-  console.log(mn.length + " modules required in " + t + "ms");
+  console.log(mn.length + " modules and " + allDeps.length + " npm modules required in " + t + "ms");
+  console.log(allDeps.join(" "));
   console.log(mn.join(" "));
   process.stdout.write("> ");
 }
@@ -86,4 +120,5 @@ module.exports = {
   isDirAsync,
   recursiveRequireModulesAsync,
   gray,
+  varNameForModule,
 }
