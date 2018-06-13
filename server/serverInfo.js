@@ -1,4 +1,4 @@
-let fs = require("fs/promises");
+let fs = require("fs").promises;
 let path = require("path");
 
 let ip = require("ip");

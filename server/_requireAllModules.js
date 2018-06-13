@@ -1,4 +1,4 @@
-let fs = require("fs/promises");
+let fs = require("fs").promises;
 
 function gray(x) {
   return '\u001b[90m' + x + '\u001b[39m';
