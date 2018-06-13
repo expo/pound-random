@@ -106,6 +106,7 @@ export default class NewPost extends React.Component {
             paddingLeft: 16,
             paddingRight: 16,
             paddingTop: 16,
+            textAlign: "center",
             paddingBottom: 16,
             textAlignVertical: "center",
             justifyContent: "center",
