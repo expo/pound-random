@@ -20,7 +20,7 @@ class UserPicker extends React.Component {
   _getListOfUsersAsync = async () => {
     let sessions = await Api.getAllSessionsAsync();
     let userId = await Api.getUserIdAsync();
-    let userIdList = Object.keys(sessions);
+    let userIdList = Object.keys(sessions || {});
     this.setState({ userIdList, userId });
   }
 
@@ -57,6 +57,7 @@ export default class FakeLogin extends React.Component {
 
   state = {
     username: null,
+    userPickerKey: 0,
   }
 
   _loginAsync = async () => {
@@ -65,6 +66,7 @@ export default class FakeLogin extends React.Component {
       let { userId, token } = session;
       console.log("Logged in as " + userId, session);
       await Api.setSessionAsync(session);
+      this.setState({userPickerKey: this.state.userPickerKey + 1});
     } catch (e) {
       if (e.type === 'CLIENT_ERROR') {
         console.warn(e);
@@ -94,7 +96,7 @@ export default class FakeLogin extends React.Component {
             this._loginAsync();
           }} />
         <Text>Or Pick One of These Users</Text>
-        <UserPicker />
+        <UserPicker key={this.state.userPickerKey} />
       </View >
     );
 
