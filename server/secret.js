@@ -11,7 +11,7 @@ for (let p of placesToTry) {
     ok = true;
     break;
   } catch (e) {
-    if (e.code === 'MODULE_NOT_FOUND') {
+    if ((e.code === 'MODULE_NOT_FOUND') || (e.toString().startsWith('Error: Cannot find module'))) {
       continue;
     } else {
       throw e;
@@ -20,5 +20,5 @@ for (let p of placesToTry) {
 }
 
 if (!ok) {
-  console.log("Didn't find database configuration. Try cloning https://github.com/expo/pound-random-secret into the same parent directory that the pound-random project is in.");
+  throw new Error("Didn't find database configuration. Try cloning https://github.com/expo/pound-random-secret into the same parent directory that the pound-random project is in.");
 }
