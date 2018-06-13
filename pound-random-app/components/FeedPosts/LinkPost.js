@@ -1,5 +1,13 @@
 import React, { Component } from "react";
-import { StyleSheet, View, Text, Dimensions, Image } from "react-native";
+import {
+  StyleSheet,
+  View,
+  Text,
+  Dimensions,
+  Image,
+  Linking,
+  TouchableOpacity
+} from "react-native";
 import moment from "moment";
 import Api from "../../Api";
 
@@ -89,7 +97,14 @@ export default class LinkPost extends Component {
   render() {
     console.log(this.props.post);
     return (
-      <View style={styles.container}>
+      <TouchableOpacity
+        style={styles.container}
+        onPress={() =>
+          Linking.openURL(this.props.post.url).catch(err =>
+            console.error("An error occurred", err)
+          )
+        }
+      >
         <View style={styles.linkTitleRow}>
           {this.state.linkInfo.domain && this.state.linkInfo.domain.logo ? (
             <Image
@@ -110,9 +125,13 @@ export default class LinkPost extends Component {
           <Text style={styles.meta}>
             {moment(this.props.post.createdTime).fromNow()}
           </Text>
-          <Text style={styles.meta}>@{content.author.displayName}</Text>
+          {this.props.post.userId && (
+            <Text style={styles.meta}>
+              @{this.props.post.userId.split(":")[1]}
+            </Text>
+          )}
         </View>
-      </View>
+      </TouchableOpacity>
     );
   }
 }
