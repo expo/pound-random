@@ -25,8 +25,7 @@ async function userIdForTokenAsync(token) {
 }
 
 async function createSessionAsync(userId, token) {
-  let result = data.writeNewObjectAsync();
-  let result = await db.queryAsync("INSERT INTO session (userId, token, createdTime, updatedTime) VALUES (?, ?, ?, ?)", [userId, token, new Date(), new Date()]);
+  let result = data.writeNewObjectAsync({userId, token}, 'session');
   return token;
 }
 
