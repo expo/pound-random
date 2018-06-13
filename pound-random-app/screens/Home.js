@@ -75,6 +75,6 @@ const styles = StyleSheet.create({
     alignItems: "center"
   },
   currentTag: {
-    fontSize: 24
+    fontSize: 20
   }
 });
