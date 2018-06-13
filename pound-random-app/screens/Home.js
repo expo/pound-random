@@ -51,7 +51,13 @@ export default class Home extends React.Component {
           refreshing={this.state.refreshing}
           onRefresh={this._fetchPostsAsync}
           data={this.state.posts}
-          renderItem={({ item }) => <TextPost post={item} />}
+          renderItem={({ item }) => {
+            return item.url ? (
+              <LinkPost post={item} />
+            ) : (
+              <TextPost post={item} />
+            );
+          }}
           ItemSeparatorComponent={Separator}
         />
         <TouchableOpacity

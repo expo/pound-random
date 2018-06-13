@@ -1,6 +1,7 @@
 import React, { Component } from "react";
-import { StyleSheet, View, Text, Dimensions } from "react-native";
+import { StyleSheet, View, Text, Dimensions, Image } from "react-native";
 import moment from "moment";
+import Api from "../../Api";
 
 const content = {
   link: "https://this.is.awebsite.co/...",
@@ -23,6 +24,12 @@ const styles = StyleSheet.create({
     width: 24,
     borderRadius: 4,
     backgroundColor: "#E0E0E0",
+    marginRight: 8
+  },
+  favicon: {
+    height: 24,
+    width: 24,
+    borderRadius: 4,
     marginRight: 8
   },
   linkTitleRow: {
@@ -71,16 +78,34 @@ const styles = StyleSheet.create({
 });
 
 export default class LinkPost extends Component {
+  state = { linkInfo: {} };
+  async componentDidMount() {
+    let linkInfo = await Api.callMethodAsync(
+      "infoForLink",
+      this.props.post.url
+    );
+    this.setState({ linkInfo });
+  }
   render() {
+    console.log(this.props.post);
     return (
       <View style={styles.container}>
         <View style={styles.linkTitleRow}>
-          <View style={styles.placeHolderFavicon} />
-          <Text style={styles.domain}>{content.link}</Text>
+          {this.state.linkInfo.domain && this.state.linkInfo.domain.logo ? (
+            <Image
+              style={styles.favicon}
+              source={{ uri: this.state.linkInfo.domain.logo }}
+            />
+          ) : (
+            <View style={styles.placeHolderFavicon} />
+          )}
+          <Text style={styles.domain}>{this.props.post.url}</Text>
         </View>
-        <Text style={styles.description}>{content.description}</Text>
+        <Text style={styles.description}>
+          {this.state.linkInfo.domain && this.state.linkInfo.domain.name}
+        </Text>
         <View style={styles.separator} />
-        <Text style={styles.body}>{content.body}</Text>
+        <Text style={styles.body}>{this.props.post.content}</Text>
         <View style={styles.metaContainer}>
           <Text style={styles.meta}>
             {moment(this.props.post.createdTime).fromNow()}

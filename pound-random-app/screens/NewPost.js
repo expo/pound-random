@@ -24,7 +24,10 @@ export default class NewPost extends React.Component {
   };
 
   componentDidMount() {
-    this._setupAsync();
+    this.clipboardScanHandle = setInterval(this._setupAsync, 1000);
+  }
+  componentWillUnmount() {
+    clearInterval(this.clipboardScanHandle);
   }
 
   _setupAsync = async () => {
@@ -50,7 +53,7 @@ export default class NewPost extends React.Component {
     try {
       await Api.callMethodAsync("createPost", {
         content: this.state.text,
-        url: null,
+        url: this.state.url,
         replyTo: null
       });
       this.props.navigation.navigate("Home");
@@ -180,14 +183,21 @@ export default class NewPost extends React.Component {
             </TouchableOpacity>
           </View>
           {this.state.linkInfo && (
-            <View>
-              <Text>{this.state.url}</Text>
-              <Image
-                source={{
-                  uri: this.state.linkInfo.domain.logo
-                }}
-                style={{ height: 32, width: 32 }}
-              />
+            <View style={{ justifyContent: "center", alignItems: "center" }}>
+              <View style={{ flexDirection: "row", alignItems: "center" }}>
+                <Image
+                  source={{
+                    uri: this.state.linkInfo.domain.logo
+                  }}
+                  style={{
+                    height: 32,
+                    width: 32,
+                    borderRadius: 4,
+                    marginRight: 8
+                  }}
+                />
+                <Text>{this.state.url}</Text>
+              </View>
               <Text>{this.state.linkInfo.domain.name}</Text>
             </View>
           )}
