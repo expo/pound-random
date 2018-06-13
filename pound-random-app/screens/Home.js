@@ -14,6 +14,7 @@ import { LinearGradient } from "expo";
 import TextPost from "../components/FeedPosts/TextPost";
 import MediaPost from "../components/FeedPosts/MediaPost";
 import LinkPost from "../components/FeedPosts/LinkPost";
+import Api from "../Api";
 
 const Separator = () => <View style={{ height: 8 }} />;
 
@@ -22,24 +23,31 @@ export default class Home extends React.Component {
     header: null
   };
 
+  state = { posts: [] };
+
+  _fetchPostsAsync = async () => {
+    let posts = await Api.callMethodAsync("feed");
+    this.setState({ posts });
+  };
+
+  componentDidMount() {
+    this._fetchPostsAsync();
+  }
+
+  _onPress(item) {
+    console.log("Item pressed: ", item);
+  }
+
   render() {
     return (
       <View style={styles.container}>
         <FlatList
           style={{ flex: 1, width: "100%", marginTop: 16 }}
-          data={[{ key: "a" }, { key: "b" }, { key: "c" }]}
-          renderItem={({ item }) => {
-            switch (item.key) {
-              case "a":
-                return <TextPost />;
-              case "b":
-                return <MediaPost />;
-              case "c":
-                return <LinkPost />;
-              default:
-                return <TextPost />;
-            }
+          keyExtractor={x => {
+            return x.postId;
           }}
+          data={this.state.posts}
+          renderItem={({ item }) => <TextPost post={item} />}
           ItemSeparatorComponent={Separator}
         />
       </View>

@@ -41,10 +41,14 @@ export default class TextPost extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <Text style={styles.body}>{content.body}</Text>
+        <Text style={styles.body}>{this.props.post.content}</Text>
         <View style={styles.metaContainer}>
-          <Text style={styles.meta}>#{content.tags[0]}</Text>
-          <Text style={styles.meta}>@{content.author.displayName}</Text>
+          <Text style={styles.meta}>#{"all"}</Text>
+          {this.props.post.userId && (
+            <Text style={styles.meta}>
+              @{this.props.post.userId.split(":")[1]}
+            </Text>
+          )}
         </View>
       </View>
     );
