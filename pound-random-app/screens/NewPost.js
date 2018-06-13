@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Clipboard, Text, TextInput, View } from 'react-native';
+import { Button, Clipboard, Image, Text, TextInput, View } from 'react-native';
 import Expo from 'expo';
 
 import Api from "../Api";
@@ -8,6 +8,8 @@ export default class NewPost extends React.Component {
 
   state = {
     text: '',
+    linkInfo: null,
+    url: null,
   }
 
   componentDidMount() {
@@ -21,6 +23,12 @@ export default class NewPost extends React.Component {
 
     if (clipboardContent.startsWith("http://") || clipboardContent.startsWith("https://")) {
       console.log("URL in clipboard:", clipboardContent);
+      let url = clipboardContent;
+      this.setState({ url });
+      let linkInfo = await Api.callMethodAsync("infoForLink", url);
+      this.setState({ linkInfo });
+    } else {
+      this.setState({ linkInfo: null, url: null });
     }
 
 
@@ -54,6 +62,16 @@ export default class NewPost extends React.Component {
         }} onChangeText={(text) => {
           this.setState({ text });
         }} />
+        {this.state.linkInfo && (
+          <View>
+            <Text>{this.state.url}</Text>
+            <Image source={{
+              uri: this.state.linkInfo.domain.logo,
+            }} style={{ height: 32, width: 32 }} />
+            <Text>{this.state.linkInfo.domain.name}</Text>
+          </View>
+        )}
+
         <Button title="Submit" onPress={() => {
           this._submitAsync();
         }} />

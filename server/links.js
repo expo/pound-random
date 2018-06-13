@@ -1,3 +1,5 @@
+let url = require('url');
+
 let clearbit = require("./clearbit");
 
 async function companyInfoForDomainAsync(domain) {
@@ -17,6 +19,17 @@ async function companyInfoForDomainAsync(domain) {
   }
 }
 
+async function infoForLinkAsync(link) {
+  let u = url.parse(link);
+  let domainInfo = await companyInfoForDomainAsync(u.hostname);
+  return {
+    domain: domainInfo,
+    url: link,
+  };
+
+}
+
 module.exports = {
   companyInfoForDomainAsync,
+  infoForLinkAsync,
 }

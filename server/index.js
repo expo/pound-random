@@ -15,6 +15,8 @@ let session = require("./session");
 let app = express();
 app.use(bodyParser.json());
 
+let LOG_API_RESPONSES = true;
+
 app.get("/", (req, res) => {
   res.send("Hello #random!");
 });
@@ -51,10 +53,14 @@ async function apiAsync(req, res) {
   try {
     let result = await api.callMethodAsync(context, method, args);
     _apiStats.success += 1;
+    if (LOG_API_RESPONSES) {
+      console.log(callsig + " -> ", result);
+    }
     res.json(result);
   } catch (err) {
     if (err && err.type === "API_ERROR") {
       _apiStats.apiError += 1;
+      console.warn("API Error: " + callsig + ": " + err);
       res.status(400);
       res.json({
         BAD_REQUEST: true,
@@ -66,6 +72,9 @@ async function apiAsync(req, res) {
       // _apiStats.clientError += 1;
       // clientErrors count as success since it just means everything is functioning normally
       _apiStats.success += 1;
+      if (LOG_API_RESPONSES) {
+        console.log("ClientError: " + callsig + ": " + err);
+      }
       res.json({
         CLIENT_ERROR: true,
         code: err.code,

@@ -49,7 +49,7 @@ async function multigetObjectsAsync(idList, table, opts) {
 
 async function getObjectAsync(id, table, opts) {
   table = table || id.replace(/:.*$/, "");
-  let x = await getObjectsAsync([id], table, opts);
+  let x = await multigetObjectsAsync([id], table, opts);
   return x[id];
 }
 

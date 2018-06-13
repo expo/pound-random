@@ -1,6 +1,7 @@
 let clientError = require("./clientError");
 let data = require("./data");
 let db = require("./db");
+let links = require("./links");
 let post = require("./post");
 let session = require("./session");
 let signup = require("./signup");
@@ -27,8 +28,7 @@ class Api {
 
   async whoAmIAsync() {
     let userId = this.context.userId;
-    let user = await data.getUserByIdAsync(userId);
-    return user;
+    return await user.getUserAsync(userId);
   }
 
 
@@ -36,6 +36,10 @@ class Api {
     let userId = this.context.userId;
     let postId = await post.newPostAsync(userId, content, url, replyTo);
     return postId;
+  }
+
+  async infoForLinkAsync(url) {
+    return await links.infoForLinkAsync(url);
   }
 
   async getPostAsync(postId) {
@@ -153,8 +157,35 @@ async function shellCallMethodAsync(method, ...args) {
   return await callMethodAsync(context, method, args);
 }
 
+let shell = (() => {
+  let a = new Api({
+    userId: "user:__shell__",
+    token: "session:user:__shell__/repl",
+  });
+  let shell = (context) => {
+    a.context = { ...a.context, ...context };
+    return shell;
+  }
+
+  let keys = Object.getOwnPropertyNames(Object.getPrototypeOf(a));
+  for (k of keys) {
+    ((k) => {
+      if (k.endsWith("Async")) {
+        let m = k.substr(0, k.length - 5);
+        shell[k] = (...args) => {
+          return a[k](...args);
+        }
+      }
+    })(k);
+  }
+
+  return shell;
+
+})();
+
 module.exports = {
   callMethodAsync,
   shellCallMethodAsync,
   Api,
+  shell,
 }
