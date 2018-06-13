@@ -1,27 +1,15 @@
 let mysql = require('mysql');
 
+let secret = require('./secret');
+
 let _connected = false;
 let conn = null;
-
-function databaseInfo() {
-  try {
-    return require('../../pound-random-secret').database;
-  } catch (e) {
-    try {
-      return require("/etc/secrets/pound-random-database");
-    } catch (e) {
-      console.log("Didn't find database configuration. Try cloning https://github.com/expo/pound-random-secret into the same parent directory that the pound-random project is in.");
-    }
-  }
-}
-
-let _databaseInfo = databaseInfo();
 
 function _connect() {
   if (_connected) {
     return false;
   } else {
-    conn = mysql.createConnection(_databaseInfo);
+    conn = mysql.createConnection(secret.database);
     conn.connect();
     _connected = true;
     return true;

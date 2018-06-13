@@ -3,7 +3,6 @@ let util = require("util");
 let bodyParser = require("body-parser");
 let express = require("express");
 let ip = require("ip");
-let keypress = require("keypress");
 let moment = require("moment");
 let qrcodeTerminal = require("qrcode-terminal");
 let qrcode = require("qrcode");
