@@ -5,6 +5,7 @@ let post = require("./post");
 let session = require("./session");
 let signup = require("./signup");
 let typedError = require("./typedError");
+let user = require("./user");
 let username = require("./username");
 
 class Api {
@@ -69,7 +70,7 @@ class Api {
     // Don't do any auth but just give a session for the userId 
     // associated with this username
     let normalizedUsername = username.normalizeUsername(rawUsername);
-    let userId = await data.userIdForNormalizedUsernameAsync(normalizedUsername);
+    let userId = await user.userIdForNormalizedUsernameAsync(normalizedUsername);
     if (!userId) {
       throw clientError("USERNAME_NOT_FOUND", "No user with the username '" + rawUsername + "'", { rawUsername, normalizedUsername });
     }

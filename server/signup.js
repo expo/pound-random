@@ -3,6 +3,7 @@ let compactUuid = require("./compactUuid");
 let data = require("./data");
 let db = require("./db");
 let session = require("./session");
+let user = require("./user");
 let username = require("./username");
 
 async function userIdExistsAsync(userId) {
@@ -37,7 +38,7 @@ async function signupUserAsync(rawUsername, mobileNumber) {
   }
   let normalizedUsername = username.normalizeUsername(rawUsername);
 
-  if (await data.userIdForNormalizedUsernameAsync(normalizedUsername)) {
+  if (await user.userIdForNormalizedUsernameAsync(normalizedUsername)) {
     throw clientError("USERNAME_TAKEN", "The username '" + rawUsername + "' is already taken.", {username: rawUsername, normalizedUsername,});
   }
 

@@ -1,6 +1,7 @@
 let compactUuid = require("./compactUuid");
 
 let data = require("./data");
+let db = require("./db");
 
 function makeToken(userId) {
   return "session:" + userId + "/" + compactUuid.makeUuid();
@@ -8,17 +9,37 @@ function makeToken(userId) {
 
 async function newSessionAsync(userId) {
   let token = makeToken(userId);
-  await data.createSessionAsync(userId, token);
+  await createSessionAsync(userId, token);
   return token;
 }
 
 async function expireSessionAsync(token) {
-  await data.deleteSessionAsync(token);
+  await deleteSessionAsync(token);
 }
+
+async function userIdForTokenAsync(token) {
+  let result = await db.queryAsync("SELECT userId FROM session WHERE token = ?", [token]);
+  if (result.length > 0) {
+    return result[0].userId;
+  }
+}
+
+async function createSessionAsync(userId, token) {
+  let result = data.writeNewObjectAsync();
+  let result = await db.queryAsync("INSERT INTO session (userId, token, createdTime, updatedTime) VALUES (?, ?, ?, ?)", [userId, token, new Date(), new Date()]);
+  return token;
+}
+
+async function deleteSessionAsync(token) {
+  await db.queryAsync("DELETE FROM session WHERE token = ?", [token]);
+}
+
+
 
 module.exports = {
   newSessionAsync,
   expireSessionAsync,
   makeToken,
+  userIdForTokenAsync,
 }
 

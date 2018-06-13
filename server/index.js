@@ -9,6 +9,7 @@ let qrcodeTerminal = require("qrcode-terminal");
 let clientError = require("./clientError");
 let data = require("./data");
 let api = require("./api");
+let session = require("./session");
 
 let app = express();
 app.use(bodyParser.json());
@@ -24,7 +25,7 @@ async function apiAsync(req, res) {
   let token = req.header("X-PoundRandom-Auth-Token");
   let userId = null;
   if (token) {
-    userId = await data.userForTokenAsync(token);
+    userId = await session.userIdForTokenAsync(token);
     if (!userId) {
       console.warn("No session for auth token: " + token);
     }

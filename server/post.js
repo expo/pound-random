@@ -20,17 +20,22 @@ async function deletePostAsync(postId) {
   await db.queryAsync("DELETE FROM post WHERE post_id = ?", [postId]);
 }
 
+async function multigetPostsAsync(postIdList) {
+  return await data.multigetObjectsAsync(postIdList, "post", { column: 'postId' });
+}
+
 async function getLatestPostsAsync() {
   let results = await db.queryAsync("SELECT * FROM post ORDER BY created_at DESC LIMIT 20");
   let posts = [];
-  for (let i = 0; i < results.length; i++) {
-    posts.push({ ...results[i] });
+  for (let p of results) {
+    posts.push({ ...p });
   }
   return posts;
 }
 
 module.exports = {
   getPostAsync,
+  multigetPostsAsync,
   newPostAsync,
   deletePostAsync,
   getLatestPostsAsync,
