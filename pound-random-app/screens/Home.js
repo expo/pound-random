@@ -11,48 +11,9 @@ import {
   ImageBackground
 } from "react-native";
 import { LinearGradient } from "expo";
-
-class FeedPost extends React.Component {
-  state = {
-    imageIsLoaded: false
-  };
-
-  randomBit = Math.random();
-
-  render() {
-    return (
-      <TouchableOpacity>
-        <ImageBackground
-          onLoad={() => {
-            this.setState({ imageIsLoaded: true });
-          }}
-          source={{
-            uri: `https://picsum.photos/${
-              Dimensions.get("window").width
-            }/80/?random=${this.randomBit}`
-          }}
-          style={{ width: "100%", height: 80 }}
-        >
-          {this.state.imageIsLoaded ? (
-            <LinearGradient
-              colors={["rgba(0,0,0,0.4)", "transparent"]}
-              style={{
-                flex: 1,
-                position: "absolute",
-                height: "100%",
-                width: "100%"
-              }}
-            />
-          ) : null}
-
-          <View style={{ width: "100%", height: 80, padding: 16 }}>
-            <Text style={{ color: "white" }}>This is a FeedPost</Text>
-          </View>
-        </ImageBackground>
-      </TouchableOpacity>
-    );
-  }
-}
+import TextPost from "../components/FeedPosts/TextPost";
+import MediaPost from "../components/FeedPosts/MediaPost";
+import LinkPost from "../components/FeedPosts/LinkPost";
 
 const Separator = () => <View style={{ height: 8 }} />;
 
@@ -65,9 +26,20 @@ export default class Home extends React.Component {
     return (
       <View style={styles.container}>
         <FlatList
-          style={{ flex: 1, width: "100%" }}
+          style={{ flex: 1, width: "100%", marginTop: 16 }}
           data={[{ key: "a" }, { key: "b" }, { key: "c" }]}
-          renderItem={({ item }) => <FeedPost />}
+          renderItem={({ item }) => {
+            switch (item.key) {
+              case "a":
+                return <TextPost />;
+              case "b":
+                return <MediaPost />;
+              case "c":
+                return <LinkPost />;
+              default:
+                return <TextPost />;
+            }
+          }}
           ItemSeparatorComponent={Separator}
         />
       </View>

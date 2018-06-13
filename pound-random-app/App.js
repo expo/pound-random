@@ -34,11 +34,14 @@ export default class App extends React.Component {
       <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
         <View style={styles.container}>
           <StatusBar barStyle="dark-content" />
-          <StackNavigator ref={this.navigatorRef} persistenceKey="debug" />
+          <StackNavigator ref={this.navigatorRef} persistenceKey={"deBug"} />
         </View>
-        <Button title="Go to Misc. Settings Etc." onPress={() => {
-          this.navigatorRef.current._navigation.navigate("MiscSettings");
-        }} />
+        <Button
+          title="Go to Misc. Settings Etc."
+          onPress={() => {
+            this.navigatorRef.current._navigation.navigate("MiscSettings");
+          }}
+        />
       </SafeAreaView>
     );
   }
