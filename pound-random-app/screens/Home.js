@@ -32,7 +32,11 @@ export default class Home extends React.Component {
   };
 
   componentDidMount() {
-    this._fetchPostsAsync();
+    this.poll = setInterval(this._fetchPostsAsync, 500);
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.poll);
   }
 
   _onPress(item) {
@@ -51,7 +55,10 @@ export default class Home extends React.Component {
           renderItem={({ item }) => <TextPost post={item} />}
           ItemSeparatorComponent={Separator}
         />
-        <TouchableOpacity style={styles.createNewPostContainer}>
+        <TouchableOpacity
+          style={styles.createNewPostContainer}
+          onPress={() => this.props.navigation.navigate("NewPost")}
+        >
           <Text style={styles.createNewPost}>NEW POST</Text>
         </TouchableOpacity>
       </View>

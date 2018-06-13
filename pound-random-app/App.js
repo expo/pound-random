@@ -39,7 +39,15 @@ export default class App extends React.Component {
         </View>
         <DebugButton
           onPress={() => {
-            this.navigatorRef.current._navigation.navigate("MiscSettings");
+            if (
+              this.navigatorRef.current._navigation.state.routes[
+                this.navigatorRef.current._navigation.state.index
+              ].routeName === "MiscSettings"
+            ) {
+              this.navigatorRef.current._navigation.navigate("Home");
+            } else {
+              this.navigatorRef.current._navigation.navigate("MiscSettings");
+            }
           }}
         />
       </SafeAreaView>
