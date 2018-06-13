@@ -1,25 +1,26 @@
 let mysql = require('mysql');
-
 let secret = require('./secret');
 
-let _connected = false;
 let conn = null;
 
+function _connected() {
+  return conn !== null
+}
+
 function _connect() {
-  if (_connected) {
+  if (_connected()) {
     return false;
   } else {
     conn = mysql.createConnection(secret.database);
     conn.connect();
-    _connected = true;
     return true;
   }
 }
 
 function _disconnect() {
-  if (_connected) {
+  if (_connected()) {
     conn.end();
-    _connected = false;
+    conn = null
     return true;
   } else {
     return false;
