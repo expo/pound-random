@@ -25,7 +25,7 @@ async function multigetPostsAsync(postIdList) {
 }
 
 async function getLatestPostsAsync() {
-  let results = await db.queryAsync("SELECT * FROM post ORDER BY created_at DESC LIMIT 20");
+  let results = await db.queryAsync("SELECT * FROM post ORDER BY createdTime DESC LIMIT 20");
   let posts = [];
   for (let p of results) {
     posts.push({ ...p });
@@ -33,7 +33,45 @@ async function getLatestPostsAsync() {
   return posts;
 }
 
+async function annotatePostsAsync(postList) {
+  let a = [];
+  for (let p of postList) {
+    a.push((async () => {
+      let extra = await getInfoAboutPostAsync(p);
+      return {
+        ...p,
+        extra,
+      };
+    })());
+  }
+  return await Promise.all(a);
+}
+
+// Should this be on the server?
+async function getInfoAboutPostAsync(p) {
+  let content = p.content;
+
+  let headline = content.split("\n", 1)[0];
+  // TODO: Make this smarter
+  let MAX_HEADLINE_LENGTH = 255;
+  if (headline.length > MAX_HEADLINE_LENGTH) {
+    headline = headline.substr(0, MAX_HEADLINE_LENGTH);
+  }
+
+  let rest = content.substr(headline.length);
+
+  rest = rest.trim();
+  headline = headline.trim();
+
+  return {
+    headline,
+    rest,
+  };
+
+}
+
 module.exports = {
+  annotatePostsAsync,
   getPostAsync,
   multigetPostsAsync,
   newPostAsync,
