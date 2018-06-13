@@ -1,6 +1,6 @@
 let placesToTry = [
-  '../../pound-random-secret',
   '/etc/secrets/pound-random-secret',
+  '../../pound-random-secret',
 ];
 
 let ok = false;
