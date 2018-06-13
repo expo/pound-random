@@ -24,19 +24,16 @@ export default class Home extends React.Component {
     header: null
   };
 
-  state = { posts: [] };
+  state = { posts: [], refreshing: false };
 
   _fetchPostsAsync = async () => {
+    this.setState({ refreshing: true });
     let posts = await Api.callMethodAsync("feed");
-    this.setState({ posts });
+    this.setState({ posts, refreshing: false });
   };
 
   componentDidMount() {
-    this.poll = setInterval(this._fetchPostsAsync, 500);
-  }
-
-  componentWillUnmount() {
-    clearInterval(this.poll);
+    this._fetchPostsAsync();
   }
 
   _onPress(item) {
@@ -51,6 +48,8 @@ export default class Home extends React.Component {
           keyExtractor={x => {
             return x.postId;
           }}
+          refreshing={this.state.refreshing}
+          onRefresh={this._fetchPostsAsync}
           data={this.state.posts}
           renderItem={({ item }) => <TextPost post={item} />}
           ItemSeparatorComponent={Separator}
