@@ -75,7 +75,7 @@ export default class MiscSettings extends React.Component {
         <Button
           title="Go to Feed"
           onPress={() => {
-            this.props.navigation.navigate("Feed");
+            this.props.navigation.navigate("Home");
           }}
         />
         <FakeLogin />
