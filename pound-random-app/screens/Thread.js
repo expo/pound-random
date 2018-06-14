@@ -16,10 +16,11 @@ import MediaPost from "../components/FeedPosts/MediaPost";
 import LinkPost from "../components/FeedPosts/LinkPost";
 import Api from "../Api";
 import { Feather } from "@expo/vector-icons";
+import { Transition } from "react-navigation-fluid-transitions";
 
 const Separator = () => <View style={{ height: 8 }} />;
 
-export default class Home extends React.Component {
+export default class Thread extends React.Component {
   static navigationOptions = {
     header: null
   };
@@ -43,6 +44,15 @@ export default class Home extends React.Component {
   render() {
     return (
       <View style={styles.container}>
+        <View style={styles.rootPostContainer}>
+          <Transition
+            shared={`content-${this.props.navigation.getParam("index", 0)}`}
+          >
+            <Text style={styles.body}>
+              {this.props.navigation.getParam("payload", {}).content}
+            </Text>
+          </Transition>
+        </View>
         <FlatList
           style={{ flex: 1, width: "100%", marginTop: 16 }}
           keyExtractor={x => {
@@ -85,6 +95,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "white"
   },
+  rootPostContainer: {},
+  rootPost: {},
   textInput: {
     fontSize: 40
   },
@@ -95,6 +107,12 @@ const styles = StyleSheet.create({
   },
   createNewPost: {
     fontSize: 20,
+    fontWeight: "600"
+  },
+  body: {
+    fontSize: 14,
+    paddingHorizontal: 16,
+    paddingBottom: 16,
     fontWeight: "600"
   }
 });

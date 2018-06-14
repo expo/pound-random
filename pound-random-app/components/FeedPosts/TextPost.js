@@ -1,13 +1,13 @@
 import React, { Component } from "react";
-import { StyleSheet, View, Text, Dimensions } from "react-native";
+import {
+  StyleSheet,
+  View,
+  Text,
+  Dimensions,
+  TouchableOpacity
+} from "react-native";
 import moment from "moment";
-
-const content = {
-  body:
-    "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It ... ",
-  tags: ["design-facts", "big-facts"],
-  author: { displayName: "YaBoiBezier" }
-};
+import { Transition } from "react-navigation-fluid-transitions";
 
 const styles = StyleSheet.create({
   container: {
@@ -41,8 +41,19 @@ const styles = StyleSheet.create({
 export default class TextPost extends Component {
   render() {
     return (
-      <View style={styles.container}>
-        <Text style={styles.body}>{this.props.post.content}</Text>
+      <TouchableOpacity
+        onPress={() =>
+          this.props.navigation.navigate("Thread", {
+            type: "text",
+            payload: this.props.post,
+            index: this.props.index
+          })
+        }
+        style={styles.container}
+      >
+        <Transition shared={`content-${this.props.index}`}>
+          <Text style={styles.body}>{this.props.post.content}</Text>
+        </Transition>
         <View style={styles.metaContainer}>
           <Text style={styles.meta}>
             {moment(this.props.post.createdTime).fromNow()}
@@ -53,7 +64,7 @@ export default class TextPost extends Component {
             </Text>
           )}
         </View>
-      </View>
+      </TouchableOpacity>
     );
   }
 }

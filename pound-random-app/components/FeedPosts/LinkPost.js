@@ -10,15 +10,7 @@ import {
 } from "react-native";
 import moment from "moment";
 import Api from "../../Api";
-
-const content = {
-  link: "https://this.is.awebsite.co/...",
-  description:
-    "Wizard News - Voldemort has eliminated 2/3 Potters, leaving ...",
-  body: "Oh shoot! This is about to be the greatest 1v1 of the century 👀",
-  tags: ["harry-pot"],
-  author: { displayName: "Gilderoy" }
-};
+import { Transition } from "react-navigation-fluid-transitions";
 
 const styles = StyleSheet.create({
   container: {
@@ -99,11 +91,16 @@ export default class LinkPost extends Component {
     return (
       <TouchableOpacity
         style={styles.container}
-        onPress={() =>
-          Linking.openURL(this.props.post.url).catch(err =>
-            console.error("An error occurred", err)
-          )
-        }
+        onPress={() => {
+          // Linking.openURL(this.props.post.url).catch(err =>
+          //   console.error("An error occurred", err)
+          // )
+          this.props.navigation.navigate("Thread", {
+            type: "link",
+            payload: this.props.post,
+            index: this.props.index
+          });
+        }}
       >
         <View style={styles.linkTitleRow}>
           {this.state.linkInfo.domain && this.state.linkInfo.domain.logo ? (
@@ -120,7 +117,9 @@ export default class LinkPost extends Component {
           {this.state.linkInfo.domain && this.state.linkInfo.domain.name}
         </Text>
         <View style={styles.separator} />
-        <Text style={styles.body}>{this.props.post.content}</Text>
+        <Transition shared={`content-${this.props.index}`}>
+          <Text style={styles.body}>{this.props.post.content}</Text>
+        </Transition>
         <View style={styles.metaContainer}>
           <Text style={styles.meta}>
             {moment(this.props.post.createdTime).fromNow()}
