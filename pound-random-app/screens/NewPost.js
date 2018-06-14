@@ -46,7 +46,6 @@ export default class NewPost extends React.Component {
     } else {
       this.setState({ linkInfo: null, url: null });
     }
-    console.log(this.state);
   };
 
   _submitAsync = async () => {
@@ -54,9 +53,9 @@ export default class NewPost extends React.Component {
       await Api.callMethodAsync("createPost", {
         content: this.state.text,
         url: this.state.url,
-        replyTo: null
+        replyTo: this.props.navigation.getParam("replyTo", null)
       });
-      this.props.navigation.navigate("Home");
+      this.props.navigation.goBack();
     } catch (e) {
       if (e.type === "CLIENT_ERROR") {
         console.warn("Error: " + e);
@@ -79,8 +78,6 @@ export default class NewPost extends React.Component {
       allowsEditing: true,
       aspect: [4, 3]
     });
-
-    console.log(result);
 
     if (!result.cancelled) {
       Image.getSize(

@@ -43,7 +43,7 @@ export default class TextPost extends Component {
     return (
       <TouchableOpacity
         onPress={() =>
-          this.props.navigation.navigate("Thread", {
+          this.props.navigation.push("Thread", {
             type: "text",
             payload: this.props.post,
             index: this.props.index

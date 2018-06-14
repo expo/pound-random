@@ -36,11 +36,28 @@ export default class Thread extends React.Component {
   _fetchPostsAsync = async () => {
     this.setState({ refreshing: true });
     let posts = await Api.callMethodAsync("feed");
+    posts = posts.filter(
+      p =>
+        p.replyTo &&
+        p.replyTo === this.props.navigation.getParam("payload", {}).postId
+    );
     this.setState({ posts, refreshing: false });
   };
 
   componentDidMount() {
     this._fetchPostsAsync();
+    this.willFocusSubscription = this.props.navigation.addListener(
+      "willFocus",
+      payload => {
+        console.debug("willFocus", payload);
+
+        this._fetchPostsAsync();
+      }
+    );
+  }
+
+  componentWillUnmount() {
+    this.willFocusSubscription.remove();
   }
 
   _onPress(item) {
@@ -166,7 +183,11 @@ export default class Thread extends React.Component {
             />
             <TouchableOpacity
               style={styles.createNewPostContainer}
-              onPress={() => this.props.navigation.navigate("NewPost")}
+              onPress={() =>
+                this.props.navigation.navigate("NewPost", {
+                  replyTo: this.props.navigation.getParam("payload", {}).postId
+                })
+              }
             >
               <Text style={styles.createNewPost}>NEW POST</Text>
             </TouchableOpacity>

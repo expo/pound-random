@@ -29,6 +29,7 @@ export default class Home extends React.Component {
   _fetchPostsAsync = async () => {
     this.setState({ refreshing: true });
     let posts = await Api.callMethodAsync("feed");
+    posts = posts.filter(p => p.replyTo === null);
     this.setState({ posts, refreshing: false });
   };
 

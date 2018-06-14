@@ -87,7 +87,6 @@ export default class LinkPost extends Component {
     this.setState({ linkInfo });
   }
   render() {
-    console.log(this.props.post);
     return (
       <TouchableOpacity
         style={styles.container}
@@ -95,7 +94,7 @@ export default class LinkPost extends Component {
           // Linking.openURL(this.props.post.url).catch(err =>
           //   console.error("An error occurred", err)
           // )
-          this.props.navigation.navigate("Thread", {
+          this.props.navigation.push("Thread", {
             type: "link",
             payload: this.props.post,
             index: this.props.index
