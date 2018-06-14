@@ -3,12 +3,12 @@ let secret = require('./secret');
 
 let conn = null;
 
-function connected() {
+function _connected() {
   return conn && conn.state === 'connected'
 }
 
 function _connect() {
-  if (connected()) {
+  if (_connected()) {
     return false;
   } else {
     conn = mysql.createConnection(secret.database);
@@ -46,4 +46,5 @@ module.exports = {
   _conn: conn,
   _connect,
   _disconnect,
+  _connected,
 };
