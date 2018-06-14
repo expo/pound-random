@@ -96,7 +96,9 @@ export default class Thread extends React.Component {
                 }
               >
                 <Feather
-                  name={!this.state.showComments ? "circle" : "minus-circle"}
+                  name={
+                    !this.state.showComments ? "message-circle" : "minus-circle"
+                  }
                   size={24}
                   color="white"
                 />
