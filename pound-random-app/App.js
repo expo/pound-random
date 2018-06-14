@@ -11,17 +11,22 @@ import {
   View
 } from "react-native";
 import { createStackNavigator, SafeAreaView } from "react-navigation";
-
+import { FluidNavigator } from "react-navigation-fluid-transitions";
 import Entry from "./screens/Entry";
 import Home from "./screens/Home";
+import Thread from "./screens/Thread";
 import MiscSettings from "./screens/MiscSettings";
 import NewPost from "./screens/NewPost";
 
 import QRCodeUrlReader from "./QRCodeUrlReader";
 
-const StackNavigator = createStackNavigator(
-  { Entry, Home, MiscSettings, NewPost },
-  { initialRouteName: "Entry", headerMode: "none" }
+const StackNavigator = FluidNavigator(
+  { Entry, Home, MiscSettings, NewPost, Thread },
+  {
+    initialRouteName: "Entry",
+    headerMode: "none",
+    mode: "card"
+  }
 );
 
 export default class App extends React.Component {
@@ -34,7 +39,7 @@ export default class App extends React.Component {
       <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
         <View style={styles.container}>
           <StatusBar barStyle="dark-content" />
-          <StackNavigator ref={this.navigatorRef} persistenceKey={"deBUg"} />
+          <StackNavigator ref={this.navigatorRef} />
         </View>
         <DebugButton
           onPress={() => {
