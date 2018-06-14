@@ -13,7 +13,6 @@ import {
 import { createStackNavigator, SafeAreaView } from "react-navigation";
 
 import Entry from "./screens/Entry";
-import Feed from "./screens/Feed";
 import Home from "./screens/Home";
 import MiscSettings from "./screens/MiscSettings";
 import NewPost from "./screens/NewPost";
@@ -21,7 +20,7 @@ import NewPost from "./screens/NewPost";
 import QRCodeUrlReader from "./QRCodeUrlReader";
 
 const StackNavigator = createStackNavigator(
-  { Entry, Feed, Home, MiscSettings, NewPost },
+  { Entry, Home, MiscSettings, NewPost },
   { initialRouteName: "Entry", headerMode: "none" }
 );
 
