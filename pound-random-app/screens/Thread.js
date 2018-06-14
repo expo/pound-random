@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   StyleSheet,
   Dimensions,
+  WebView,
   FlatList,
   ImageBackground
 } from "react-native";
@@ -26,7 +27,11 @@ export default class Thread extends React.Component {
     header: null
   };
 
-  state = { posts: [], refreshing: false };
+  state = {
+    posts: [],
+    refreshing: false,
+    showComments: this.props.navigation.getParam("type", "text") !== "link"
+  };
 
   _fetchPostsAsync = async () => {
     this.setState({ refreshing: true });
@@ -43,19 +48,71 @@ export default class Thread extends React.Component {
   }
 
   render() {
+    const url = this.props.navigation.getParam("payload", {}).url;
     return (
       <View style={styles.container}>
-        <View style={styles.rootPostContainer}>
-          <TouchableOpacity
-            style={{ margin: 16 }}
-            onPress={() => this.props.navigation.goBack()}
+        <View
+          style={[
+            styles.rootPostContainer,
+            this.props.navigation.getParam("type", "text") === "link" &&
+            !this.state.showComments
+              ? { flex: 1 }
+              : {}
+          ]}
+        >
+          <View
+            style={{ flexDirection: "row", justifyContent: "space-between" }}
           >
-            <Feather name="arrow-left" size={24} color="white" />
-          </TouchableOpacity>
+            <TouchableOpacity
+              style={{ margin: 16 }}
+              onPress={() => this.props.navigation.goBack()}
+            >
+              <Feather name="arrow-left" size={24} color="white" />
+            </TouchableOpacity>
+            {this.props.navigation.getParam("type", "text") === "link" && (
+              <TouchableOpacity
+                style={{ margin: 16 }}
+                onPress={() =>
+                  this.setState(state => {
+                    return { showComments: !state.showComments };
+                  })
+                }
+              >
+                <Feather
+                  name={!this.state.showComments ? "circle" : "minus-circle"}
+                  size={24}
+                  color="white"
+                />
+              </TouchableOpacity>
+            )}
+          </View>
+
+          {url &&
+            !this.state.showComments && (
+              <WebView
+                startInLoadingState
+                source={{ uri: url }}
+                style={{
+                  width: "100%",
+                  height: Dimensions.get("window").height
+                }}
+              />
+            )}
+
           <Transition
             shared={`content-${this.props.navigation.getParam("index", 0)}`}
           >
-            <Text style={styles.body}>
+            <Text
+              style={[
+                styles.body,
+                [
+                  styles.rootPostContainer,
+                  this.props.navigation.getParam("type", "text") === "text"
+                    ? { paddingTop: 0 }
+                    : {}
+                ]
+              ]}
+            >
               {this.props.navigation.getParam("payload", {}).content}
             </Text>
           </Transition>
@@ -80,37 +137,41 @@ export default class Thread extends React.Component {
             </View>
           </Transition>
         </View>
-        <FlatList
-          style={{ flex: 1, width: "100%", marginTop: 16 }}
-          keyExtractor={x => {
-            return x.postId;
-          }}
-          refreshing={this.state.refreshing}
-          onRefresh={this._fetchPostsAsync}
-          data={this.state.posts}
-          renderItem={({ item, index }) => {
-            return item.url ? (
-              <LinkPost
-                post={item}
-                index={index}
-                navigation={this.props.navigation}
-              />
-            ) : (
-              <TextPost
-                post={item}
-                index={index}
-                navigation={this.props.navigation}
-              />
-            );
-          }}
-          ItemSeparatorComponent={Separator}
-        />
-        <TouchableOpacity
-          style={styles.createNewPostContainer}
-          onPress={() => this.props.navigation.navigate("NewPost")}
-        >
-          <Text style={styles.createNewPost}>NEW POST</Text>
-        </TouchableOpacity>
+        {this.state.showComments && (
+          <React.Fragment>
+            <FlatList
+              style={{ flex: 1, width: "100%", marginTop: 16 }}
+              keyExtractor={x => {
+                return x.postId;
+              }}
+              refreshing={this.state.refreshing}
+              onRefresh={this._fetchPostsAsync}
+              data={this.state.posts}
+              renderItem={({ item, index }) => {
+                return item.url ? (
+                  <LinkPost
+                    post={item}
+                    index={index}
+                    navigation={this.props.navigation}
+                  />
+                ) : (
+                  <TextPost
+                    post={item}
+                    index={index}
+                    navigation={this.props.navigation}
+                  />
+                );
+              }}
+              ItemSeparatorComponent={Separator}
+            />
+            <TouchableOpacity
+              style={styles.createNewPostContainer}
+              onPress={() => this.props.navigation.navigate("NewPost")}
+            >
+              <Text style={styles.createNewPost}>NEW POST</Text>
+            </TouchableOpacity>
+          </React.Fragment>
+        )}
       </View>
     );
   }
@@ -124,8 +185,7 @@ const styles = StyleSheet.create({
   },
   rootPostContainer: {
     width: "100%",
-    justifyContent: "space-between",
-    height: "30%",
+    // justifyContent: "space-between",
     backgroundColor: "#C4C4C4"
   },
   rootPost: {},
