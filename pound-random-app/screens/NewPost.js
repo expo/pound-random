@@ -7,6 +7,7 @@ import {
   TextInput,
   View,
   Dimensions,
+  Switch,
   KeyboardAvoidingView,
   TouchableOpacity
 } from "react-native";
@@ -20,7 +21,8 @@ export default class NewPost extends React.Component {
     text: "",
     linkInfo: null,
     url: null,
-    image: null
+    image: null,
+    willAttachUrl: false
   };
 
   componentDidMount() {
@@ -52,7 +54,7 @@ export default class NewPost extends React.Component {
     try {
       await Api.callMethodAsync("createPost", {
         content: this.state.text,
-        url: this.state.url,
+        url: this.state.willAttachUrl ? this.state.url : null,
         replyTo: this.props.navigation.getParam("replyTo", null)
       });
       this.props.navigation.goBack();
@@ -179,26 +181,56 @@ export default class NewPost extends React.Component {
               <Feather name="image" size={16} color="white" />
             </TouchableOpacity>
           </View>
-          {this.state.linkInfo && (
-            <View style={{ justifyContent: "center", alignItems: "center" }}>
-              <View style={{ flexDirection: "row", alignItems: "center" }}>
-                <Image
-                  source={{
-                    uri: this.state.linkInfo.domain.logo
-                  }}
-                  style={{
-                    height: 32,
-                    width: 32,
-                    borderRadius: 4,
-                    marginRight: 8
-                  }}
-                />
-                <Text>{this.state.url}</Text>
+          {this.state.willAttachUrl ? (
+            this.state.linkInfo ? (
+              <View
+                style={{
+                  justifyContent: "center",
+                  alignItems: "center",
+                  padding: 16
+                }}
+              >
+                <View style={{ flexDirection: "row", alignItems: "center" }}>
+                  {this.state.linkInfo.domain.logo && (
+                    <Image
+                      source={{
+                        uri: this.state.linkInfo.domain.logo
+                      }}
+                      style={{
+                        height: 32,
+                        width: 32,
+                        borderRadius: 4,
+                        marginRight: 8
+                      }}
+                    />
+                  )}
+                  <Text>{this.state.url}</Text>
+                </View>
+                <Text>{this.state.linkInfo.domain.name}</Text>
               </View>
-              <Text>{this.state.linkInfo.domain.name}</Text>
-            </View>
-          )}
-
+            ) : (
+              <View
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  padding: 16
+                }}
+              >
+                <Text>Copy a link into your Clipboard to attach a link</Text>
+              </View>
+            )
+          ) : null}
+          <View
+            style={{ flexDirection: "row", alignItems: "center", padding: 16 }}
+          >
+            <Switch
+              value={this.state.willAttachUrl}
+              onValueChange={v => this.setState({ willAttachUrl: v })}
+            />
+            <Text style={{ fontSize: 14, paddingLeft: 8 }}>
+              Attach a link this post
+            </Text>
+          </View>
           <View
             style={{
               paddingVertical: 24,
