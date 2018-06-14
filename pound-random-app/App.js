@@ -23,7 +23,7 @@ import QRCodeUrlReader from "./QRCodeUrlReader";
 const StackNavigator = FluidNavigator(
   { Entry, Home, MiscSettings, NewPost, Thread },
   {
-    initialRouteName: "Entry",
+    initialRouteName: "Home",
     headerMode: "none",
     mode: "card"
   }

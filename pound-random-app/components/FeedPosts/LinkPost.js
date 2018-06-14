@@ -120,16 +120,19 @@ export default class LinkPost extends Component {
         <Transition shared={`content-${this.props.index}`}>
           <Text style={styles.body}>{this.props.post.content}</Text>
         </Transition>
-        <View style={styles.metaContainer}>
-          <Text style={styles.meta}>
-            {moment(this.props.post.createdTime).fromNow()}
-          </Text>
-          {this.props.post.userId && (
+
+        <Transition shared={`meta-${this.props.index}`}>
+          <View style={styles.metaContainer}>
             <Text style={styles.meta}>
-              @{this.props.post.userId.split(":")[1]}
+              {moment(this.props.post.createdTime).fromNow()}
             </Text>
-          )}
-        </View>
+            {this.props.post.userId && (
+              <Text style={styles.meta}>
+                @{this.props.post.userId.split(":")[1]}
+              </Text>
+            )}
+          </View>
+        </Transition>
       </TouchableOpacity>
     );
   }
