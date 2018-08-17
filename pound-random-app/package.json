@@ -1,0 +1,51 @@
+{
+  "main": "node_modules/expo/AppEntry.js",
+  "private": true,
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{js,json,css,md}": [
+      "prettier --write",
+      "git add"
+    ]
+  },
+  "dependencies": {
+    "apollo-boost": "^0.1.10",
+    "apollo-cache-inmemory": "^1.2.6",
+    "apollo-cache-persist": "^0.1.1",
+    "apollo-client": "^2.3.6",
+    "apollo-link": "^1.2.2",
+    "apollo-link-error": "^1.1.0",
+    "apollo-link-http": "^1.5.4",
+    "apollo-link-ws": "^1.0.8",
+    "babel-plugin-idx": "^2.4.0",
+    "expo": "29.0.0",
+    "graphql": "^0.13.2",
+    "graphql-tag": "^2.9.2",
+    "idx": "^2.4.0",
+    "is-url": "^1.2.4",
+    "lodash": "^4.17.10",
+    "moment": "^2.22.2",
+    "react": "16.3.1",
+    "react-apollo": "^2.1.9",
+    "react-native": "https://github.com/expo/react-native/archive/sdk-29.0.0.tar.gz",
+    "react-native-autolink": "^1.4.0",
+    "react-native-root-modal": "^3.1.1",
+    "react-navigation": "^2.9.3",
+    "react-navigation-fluid-transitions": "^0.2.0",
+    "sentry-expo": "~1.9.0",
+    "styled-components": "^3.3.3",
+    "subscriptions-transport-ws": "^0.9.13",
+    "unstated": "^2.1.1",
+    "url-parse": "^1.4.3"
+  },
+  "devDependencies": {
+    "husky": "^1.0.0-rc.13",
+    "lint-staged": "^7.2.0",
+    "prettier": "^1.13.5",
+    "redux": "^4.0.0"
+  }
+}

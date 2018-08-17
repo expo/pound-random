@@ -1,0 +1,1 @@
+curl --data '[1,2]' --request POST  --header "Content-Type: application/json"  --url http://localhost:3200/api/add

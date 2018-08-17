@@ -1,0 +1,59 @@
+{
+  "expo": {
+    "name": "Blue",
+    "description": "A discussion app.",
+    "slug": "blue",
+    "privacy": "public",
+    "sdkVersion": "29.0.0",
+    "platforms": ["ios", "android"],
+    "version": "0.1.3",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "cover",
+      "backgroundColor": "#ffffff"
+    },
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
+    "assetBundlePatterns": ["**/*"],
+    "ios": {
+      "supportsTablet": false,
+      "buildNumber": "4",
+      "bundleIdentifier": "co.jwheatley.blue",
+      "infoPlist": {
+        "NSCameraUsageDescription":
+          "Blue uses the camera to allow you to share visual content with your fellow users!",
+        "NSPhotoLibraryAddUsageDescription":
+          "Blue uses the photo library to allow you to share visual content with your fellow users!",
+        "NSPhotoLibraryUsageDescription":
+          "Blue uses the photo library to allow you to share visual content with your fellow users!"
+      }
+    },
+    "notification": {
+      "icon": "./assets/noti.png"
+    },
+    "android": {
+      "package": "co.jwheatley.blue",
+      "versionCode": 4
+    },
+    "androidStatusBar": {
+      "barStyle": "light-content",
+      "backgroundColor": "#000000"
+    },
+    "primaryColor": "#000000",
+    "hooks": {
+      "postPublish": [
+        {
+          "file": "sentry-expo/upload-sourcemaps",
+          "config": {
+            "organization": "juwan-wheatley",
+            "project": "pound-random",
+            "authToken": "ba831e90c8b5421b907731c3bc77415161fa905c437e4572ae79ad2192886adc"
+          }
+        }
+      ]
+    }
+  }
+}
