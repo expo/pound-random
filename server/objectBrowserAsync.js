@@ -1,4 +1,4 @@
-let fs = require("fs").promises;
+let fs = require("fs");
 let path = require("path");
 
 
@@ -11,7 +11,7 @@ module.exports = async (req, res) => {
     obj = await data.getObjectAsync(id);
   }
   let props = { id, obj };
-  let jsx = await fs.readFile(path.join(__dirname, "ObjectBrowser.jsx"));
+  let jsx = fs.readFileSync(path.join(__dirname, "ObjectBrowser.jsx"));
   z = `
 <html>
 <head>

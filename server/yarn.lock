@@ -1873,7 +1873,7 @@ mimic-fn@^1.0.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/mimic-fn/-/mimic-fn-1.2.0.tgz#820c86a39334640e99516928bd03fca88057d022"
 
-minimatch@^3.0.2, minimatch@^3.0.4:
+minimatch@3.0.4, minimatch@^3.0.2, minimatch@^3.0.4:
   version "3.0.4"
   resolved "https://registry.yarnpkg.com/minimatch/-/minimatch-3.0.4.tgz#5166e286457f03306064be5497e8dbb0c3d32083"
   dependencies:
@@ -2272,6 +2272,12 @@ process-nextick-args@~2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/process-nextick-args/-/process-nextick-args-2.0.0.tgz#a37d732f4271b4ab1ad070d35508e8290788ffaa"
 
+project-repl@^1.3.0:
+  version "1.3.0"
+  resolved "https://registry.yarnpkg.com/project-repl/-/project-repl-1.3.0.tgz#6799d486fa0d739e916c4fe9f0ebe7ecff9f28da"
+  dependencies:
+    recursive-readdir "^2.2.2"
+
 promise-limit@^2.6.0:
   version "2.6.0"
   resolved "https://registry.yarnpkg.com/promise-limit/-/promise-limit-2.6.0.tgz#cb6959fcfdd0ee6ec694ec58b2b3b856ca52ffed"
@@ -2438,6 +2444,12 @@ readdirp@^2.0.0:
     minimatch "^3.0.2"
     readable-stream "^2.0.2"
     set-immediate-shim "^1.0.1"
+
+recursive-readdir@^2.2.2:
+  version "2.2.2"
+  resolved "https://registry.yarnpkg.com/recursive-readdir/-/recursive-readdir-2.2.2.tgz#9946fb3274e1628de6e36b2f6714953b4845094f"
+  dependencies:
+    minimatch "3.0.4"
 
 regenerator-runtime@^0.11.0:
   version "0.11.1"

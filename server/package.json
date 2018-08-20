@@ -33,7 +33,8 @@
     "prod": "NODE_ENV=production node ."
   },
   "devDependencies": {
-    "nodemon": "^1.17.5"
+    "nodemon": "^1.17.5",
+    "project-repl": "^1.3.0"
   },
   "repl": {
     "ignore": {
