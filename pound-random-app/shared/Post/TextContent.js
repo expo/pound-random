@@ -57,16 +57,18 @@ export default withNavigation(({ content, navigation }) => {
                 );
               } else if (_.startsWith(word, '@') && word !== '@') {
                 return (
-                  <TouchableOpacity
-                    key={i}
-                    onPress={() =>
-                      navigation.navigate('Profile', { userId: userIdFromHandle(word.trim()) })
-                    }>
+                  <React.Fragment key={i}>
+                    <TouchableOpacity
+                      onPress={() =>
+                        navigation.navigate('Profile', { userId: userIdFromHandle(word.trim()) })
+                      }
+                      style={{ backgroundColor: colors.lilaLighter, borderRadius: 4, padding: 2 }}>
+                      <Text style={{ color: colors.expo }}>{word}</Text>
+                    </TouchableOpacity>
                     <Text style={{ color: colors.expo }}>
-                      {word}
                       {i !== content.split(' ').length - 1 ? ' ' : ''}
                     </Text>
-                  </TouchableOpacity>
+                  </React.Fragment>
                 );
               } else {
                 return i !== content.split(' ').length - 1 ? (
