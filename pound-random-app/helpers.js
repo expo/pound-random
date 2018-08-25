@@ -94,10 +94,11 @@ export const tokenizeContent = async (text) => {
             value: tweet,
           });
         } else if (
-          (url.host === 'youtube.com' ||
+          ((url.host === 'youtube.com' ||
             url.host === 'm.youtube.com' ||
             url.host === 'www.youtube.com') &&
-          url.query.v
+            url.query.v) ||
+          (url.host === 'youtu.be' && url.pathname.length !== 0)
         ) {
           const yJSON = await FetchCache.get(
             `https://www.youtube.com/oembed?url=${url.href}&format=json`
