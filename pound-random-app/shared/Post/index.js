@@ -228,7 +228,6 @@ class Post extends PureComponent {
                     style={{
                       flex: 1,
                       width: '100%',
-                      borderRadius: 12,
                       backgroundColor: colors.black30,
                       alignItems: 'center',
                       justifyContent: 'center',
