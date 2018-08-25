@@ -107,8 +107,6 @@ export default class Profile extends Component {
   render() {
     const { userId } = UserState.state;
 
-    console.log(this.state.posts);
-
     return (
       <KeyboardAvoidingView
         behavior={!__DEV__ ? 'padding' : Platform.OS === 'ios' ? 'padding' : null}
