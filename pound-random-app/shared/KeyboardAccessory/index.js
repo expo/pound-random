@@ -550,9 +550,9 @@ class EmotePicker extends Component {
                   <TouchableOpacity
                     onPress={() => this.props.setEmote(item.name)}
                     style={{
-                      backgroundColor: colors.white50,
+                      backgroundColor: colors.white,
                       padding: 4,
-                      borderRadius: 12,
+                      borderRadius: 8,
                       marginRight: 4,
                     }}>
                     <Image
