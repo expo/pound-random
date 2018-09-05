@@ -42,6 +42,7 @@ import { Subscribe } from 'unstated';
 import api from '../Api';
 import assets from '../assets';
 import { PostFragment, NotificationFragment } from '../fragments';
+import { Appbar, FAB } from 'react-native-paper';
 
 const Separator = () => <View style={{ height: 8 }} />;
 
@@ -231,49 +232,6 @@ class Home extends React.PureComponent {
             style={styles.keyboardAvoidingView}
             behavior={!__DEV__ ? 'padding' : Platform.OS === 'ios' ? 'padding' : null}
             keyboardVerticalOffset={Constants.statusBarHeight}>
-            <View
-              style={{
-                flexDirection: 'row',
-                backgroundColor: 'black',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-              }}>
-              <NotificationsButton userId={userId} navigation={this.props.navigation} />
-              <TouchableOpacity
-                onPress={() => {
-                  const h = setInterval(() => {
-                    if (this.flatlistRef.current && this.state.feed && this.state.feed.length) {
-                      this.flatlistRef.current.scrollToIndex({ index: 0, viewOffset: 0 });
-
-                      clearInterval(h);
-                    }
-                  }, 32);
-                }}>
-                <Image
-                  source={assets.icons.blueWhite}
-                  style={{ height: 28, width: 28 }}
-                  resizeMode="contain"
-                />
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={[styles.floatingButton]}
-                onPress={() => {
-                  const h = setInterval(() => {
-                    if (this.drawerRef.current) {
-                      if (this.state.drawerIsOpen) {
-                        this.drawerRef.current.closeDrawer();
-                        this.setState({ drawerIsOpen: false });
-                      } else {
-                        this.drawerRef.current.openDrawer();
-                        this.setState({ drawerIsOpen: true });
-                      }
-                      clearInterval(h);
-                    }
-                  }, 32);
-                }}>
-                <Feather name="menu" color="white" size={24} />
-              </TouchableOpacity>
-            </View>
             <DrawerLayout
               drawerWidth={256}
               drawerPosition={DrawerLayout.positions.Right}
@@ -281,6 +239,8 @@ class Home extends React.PureComponent {
               ref={this.drawerRef}
               drawerBackgroundColor={colors.appBackground}
               overlayColor="rgba(0,0,0,0.2)"
+              onDrawerClose={() => this.setState({ drawerIsOpen: false })}
+              onDrawerOpen={() => this.setState({ drawerIsOpen: true })}
               renderNavigationView={() => (
                 <Drawer
                   opCount={
@@ -321,6 +281,28 @@ class Home extends React.PureComponent {
                           hide={this.hideKeyboardAccessory}
                           isVisible={this.state.showKeyboardAccessory}
                           replyOptions={this.state.replyOptions}
+                          drawerRef={this.drawerRef}
+                          goToNotifications={() => {
+                            if (!userId) {
+                              alert('You must be logged in to access your notifications.');
+                              return;
+                            }
+                            this.props.navigation.navigate('Notifications', { userId: userId });
+                          }}
+                          toggleDrawer={() => {
+                            const h = setInterval(() => {
+                              if (this.drawerRef.current) {
+                                if (this.state.drawerIsOpen) {
+                                  this.drawerRef.current.closeDrawer();
+                                  this.setState({ drawerIsOpen: false });
+                                } else {
+                                  this.drawerRef.current.openDrawer();
+                                  this.setState({ drawerIsOpen: true });
+                                }
+                                clearInterval(h);
+                              }
+                            }, 32);
+                          }}
                         />
                       ) : (
                         <AuthPrompt onPress={() => this.setState({ showAuthForm: true })} />
@@ -360,7 +342,15 @@ const GET_NOTIFICATIONS = gql`
   ${NotificationFragment}
 `;
 
-export const PostInput = ({ isVisible, show, hide, replyOptions, threadView }) => (
+export const PostInput = ({
+  isVisible,
+  show,
+  hide,
+  replyOptions,
+  threadView,
+  toggleDrawer = () => null,
+  goToNotifications = () => null,
+}) => (
   <React.Fragment>
     {isVisible ? (
       <KeyboardAccessory
@@ -372,8 +362,24 @@ export const PostInput = ({ isVisible, show, hide, replyOptions, threadView }) =
         hide={hide}
       />
     ) : threadView ? null : (
-      <View style={{ width: '100%', backgroundColor: 'black' }}>
-        <TouchableOpacity
+      <React.Fragment>
+        <Appbar style={{ justifyContent: 'space-between' }}>
+          <Appbar.Action icon="notifications" onPress={goToNotifications} />
+          <Appbar.Action icon="menu" onPress={toggleDrawer} />
+        </Appbar>
+
+        <FAB
+          icon="add"
+          onPress={() => show()}
+          color="black"
+          style={{
+            top: -24,
+            backgroundColor: 'white',
+            position: 'absolute',
+            alignSelf: 'center',
+          }}
+        />
+        {/* <TouchableOpacity
           onPress={() => show()}
           activeOpacity={0.7}
           style={{
@@ -392,8 +398,8 @@ export const PostInput = ({ isVisible, show, hide, replyOptions, threadView }) =
             }}>
             Add a post
           </Text>
-        </TouchableOpacity>
-      </View>
+        </TouchableOpacity> */}
+      </React.Fragment>
     )}
   </React.Fragment>
 );

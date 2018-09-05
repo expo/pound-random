@@ -35,8 +35,18 @@ import { HttpLink } from 'apollo-link-http';
 import { onError } from 'apollo-link-error';
 import { WebSocketLink } from 'apollo-link-ws';
 import { getMainDefinition } from 'apollo-utilities';
+import { Provider as PaperProvider, DefaultTheme } from 'react-native-paper';
 
 Sentry.config('https://45beb7705a664aae885c3f81e3fd6555@sentry.io/1244317').install();
+
+const theme = {
+  ...DefaultTheme,
+  colors: {
+    ...DefaultTheme.colors,
+    primary: 'black',
+    accent: colors.expo,
+  },
+};
 
 const cache = new InMemoryCache();
 
@@ -171,10 +181,12 @@ class App extends React.Component {
         <StatusBar barStyle="light-content" backgroundColor="black" />
         <UnstatedProvider inject={[userState]}>
           <ApolloProvider client={client}>
-            <Main
-              ref={this.navigatorRef}
-              screenProps={{ notification: this.props.exp.notification }}
-            />
+            <PaperProvider theme={theme}>
+              <Main
+                ref={this.navigatorRef}
+                screenProps={{ notification: this.props.exp.notification }}
+              />
+            </PaperProvider>
           </ApolloProvider>
         </UnstatedProvider>
       </SafeAreaView>
