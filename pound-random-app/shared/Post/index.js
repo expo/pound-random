@@ -166,6 +166,55 @@ class Post extends PureComponent {
     (o) => !(o.type === 'text' && o.value.trim().length === 0)
   );
 
+  images = (
+    <View>
+      <FlatList
+        removeClippedSubviews
+        data={this.content.filter((c) => c.type === 'image')}
+        horizontal
+        pagingEnabled
+        showsHorizontalScrollIndicator
+        keyExtractor={(item, index) => `${index}`}
+        renderItem={({ item: { value, type }, index }) => {
+          const maxHeight = Dimensions.get('window').height;
+          const maxWidth = Dimensions.get('window').width;
+
+          const ratio = maxWidth / value.width;
+
+          const width = value.width * ratio;
+          const height = value.height * ratio;
+
+          return (
+            <Image
+              key={index}
+              fadeDuration={0}
+              source={{ uri: value.uri }}
+              style={{
+                height,
+                width,
+                alignSelf: 'center',
+              }}
+              resizeMode="cover"
+            />
+          );
+        }}
+      />
+      {this.content.filter((c) => c.type === 'image').length > 1 ? (
+        <View
+          style={{
+            position: 'absolute',
+            top: 16,
+            right: 16,
+            backgroundColor: colors.black10,
+            borderRadius: 24,
+            padding: 8,
+          }}>
+          <Feather name="layers" color={colors.white80} size={24} />
+        </View>
+      ) : null}
+    </View>
+  );
+
   contentView = this.content.map(({ value, type }, i) => {
     let last = i === this.content.length - 1;
 
@@ -177,27 +226,7 @@ class Post extends PureComponent {
           case 'link':
             return <Link key={i} {...value} last={last} />;
           case 'image':
-            const maxHeight = Dimensions.get('window').height;
-            const maxWidth = Dimensions.get('window').width;
-
-            const ratio = maxWidth / value.width;
-
-            const width = value.width * ratio;
-            const height = value.height * ratio;
-
-            return (
-              <Image
-                key={i}
-                fadeDuration={0}
-                source={{ uri: value.uri }}
-                style={{
-                  height,
-                  width,
-                  alignSelf: 'center',
-                }}
-                resizeMode="cover"
-              />
-            );
+            return null;
           case 'video':
             return <Vid uri={value.uri} key={i} />;
           case 'tweet':
@@ -310,6 +339,7 @@ class Post extends PureComponent {
                     .format('M/D/YYYY, h:mma')}
             </Username>
           </View>
+          {this.images}
           {this.contentView}
           {!this.props.inNotificationView ? (
             <Metadata
