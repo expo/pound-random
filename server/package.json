@@ -28,6 +28,9 @@
     "uuid": "^3.2.1",
     "validator": "^10.4.0"
   },
+  "engines": {
+    "node": ">=10 <11"
+  },
   "scripts": {
     "start": "npx nodemon .",
     "prod": "NODE_ENV=production node ."
